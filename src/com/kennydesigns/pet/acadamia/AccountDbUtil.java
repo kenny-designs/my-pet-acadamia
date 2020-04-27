@@ -9,7 +9,6 @@ import java.sql.ResultSet;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 /**
@@ -73,7 +72,9 @@ public class AccountDbUtil {
 			// account found, return it	
 			Account theAccount = new Account(myRs.getString("username"),
 											 myRs.getString("password"),
-											 myRs.getInt("id"));			
+											 myRs.getInt("id"),
+											 myRs.getInt("battles_won"),
+											 myRs.getInt("battles_lost"));			
 			
 			return theAccount;
 		}
@@ -126,5 +127,50 @@ public class AccountDbUtil {
 			// clean up JDBC objects
 			close(myConn, myStmt, null);
 		}	
+	}
+
+	/**
+	 * Returns an account object based on the given username.
+	 * 
+	 * @param username
+	 * @return Account object based on the given username. Null if not found.
+	 */
+	public Account getAccount(String username) throws Exception {
+		Connection myConn 		 = null;
+		PreparedStatement myStmt = null;
+		ResultSet myRs 			 = null;
+		
+		try {			
+			// get connection to database
+			myConn = dataSource.getConnection();
+			
+			// create sql to get selected user
+			String sql = "SELECT * FROM accounts WHERE username=?";
+			
+			// create prepared statement
+			myStmt = myConn.prepareStatement(sql);
+			
+			// set parameters
+			myStmt.setString(1, username);
+			
+			// execute statement
+			myRs = myStmt.executeQuery();
+	
+			// if no account found, return null
+			if (!myRs.next()) return null;
+		
+			// account found, return it	
+			Account theAccount = new Account(myRs.getString("username"),
+											 null,
+											 -1,
+											 myRs.getInt("battles_won"),
+											 myRs.getInt("battles_lost"));			
+			
+			return theAccount;
+		}
+		finally {
+			// Cleanup JDBC objects
+			close(myConn, myStmt, myRs);
+		}
 	}
 }

@@ -13,7 +13,11 @@
 <h1>Welcome Home ${LOGGED_USER.username}!</h1>
 
 <br />
-<a href="./stats.jsp">Stats</a>
+<form action="LoginControllerServlet" method="GET">
+	<input type="hidden" name="command" value="DISPLAY_ACCOUNT_STATS" />
+	<input type="hidden" name="username" value="${LOGGED_USER.username}" />
+	<input type="submit" value="Stats" />
+</form>
 <br />
 <a href="./manage-team.jsp">Manage Team</a>
 <br />

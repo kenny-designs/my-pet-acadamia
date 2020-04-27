@@ -9,6 +9,11 @@
 <body>
 
 <h1>Player Statistics</h1>
+<h3>Username: ${ACCOUNT_STATS.username}</h3>
+<h4>
+	Battles Won: ${ACCOUNT_STATS.battlesWon} <br>
+	Battles Lost: ${ACCOUNT_STATS.battlesLost}
+</h4>
 
 <br />
 <a href="./home.jsp">Return Home</a>

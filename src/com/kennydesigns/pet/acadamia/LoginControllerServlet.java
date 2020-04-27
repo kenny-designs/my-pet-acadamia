@@ -36,7 +36,28 @@ public class LoginControllerServlet extends HttpServlet {
 			throw new ServletException(exc);
 		}
 	}
-       
+	 
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		try {	
+			// read the 'command' parameter
+			String theCommand = request.getParameter("command");
+					
+			// perform action based on given command
+			switch  (theCommand) {
+			// get information about an account
+			case "DISPLAY_ACCOUNT_STATS":
+				displayAccountStats(request, response);
+				break;
+			}			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
@@ -61,11 +82,25 @@ public class LoginControllerServlet extends HttpServlet {
 			// have user log out of their account
 			case "LOGOUT":
 				logoutAccount(request, response);
-				break;
-			}
+				break;				
+			}			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	private void displayAccountStats(HttpServletRequest request, HttpServletResponse response) 
+		throws Exception {
+		// the user we wish to look at the stats of
+		String username = request.getParameter("username");
+		
+		// account object based on the user
+		Account theAccount = accountDbUtil.getAccount(username);
+		request.setAttribute("ACCOUNT_STATS", theAccount);
+		
+		// display user statistics
+		RequestDispatcher dispatcher = request.getRequestDispatcher("./stats.jsp");
+		dispatcher.forward(request, response);
 	}
 
 	/**

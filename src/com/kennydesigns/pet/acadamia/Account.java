@@ -8,18 +8,24 @@ public class Account {
 	private String username;
 	private String password;
 	private int id;
-	
-	public Account(String username, String password) {
-		this.username = username;
-		this.password = password;
-	}
-
-	public Account(String username, String password, int id) {
+	private int battlesWon;
+	private int battlesLost;
+		
+	/**
+	 * @param username
+	 * @param password
+	 * @param id
+	 * @param battlesWon
+	 * @param battlesLost
+	 */
+	public Account(String username, String password, int id, int battlesWon, int battlesLost) {
 		this.username = username;
 		this.password = password;
 		this.id = id;
-	}	
-	
+		this.battlesWon = battlesWon;
+		this.battlesLost = battlesLost;
+	}
+
 	/**
 	 * @return the username
 	 */
@@ -60,5 +66,33 @@ public class Account {
 	 */
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	/**
+	 * @return the battlesWon
+	 */
+	public int getBattlesWon() {
+		return battlesWon;
+	}
+
+	/**
+	 * @param battlesWon the battlesWon to set
+	 */
+	public void setBattlesWon(int battlesWon) {
+		this.battlesWon = battlesWon;
+	}
+
+	/**
+	 * @return the battlesLost
+	 */
+	public int getBattlesLost() {
+		return battlesLost;
+	}
+
+	/**
+	 * @param battlesLost the battlesLost to set
+	 */
+	public void setBattlesLost(int battlesLost) {
+		this.battlesLost = battlesLost;
 	}
 }
