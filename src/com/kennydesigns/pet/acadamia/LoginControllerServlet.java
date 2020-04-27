@@ -3,6 +3,7 @@ package com.kennydesigns.pet.acadamia;
 import java.io.IOException;
 
 import javax.annotation.Resource;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,7 +21,7 @@ public class LoginControllerServlet extends HttpServlet {
 		
 	private AccountDbUtil accountDbUtil;
 
-	@Resource(name="jdbc/my_pet_acadamia")
+	@Resource(name="jdbc/pet_acadamia_db")
 	private DataSource dataSource;
 	
 	@Override
@@ -58,5 +59,9 @@ public class LoginControllerServlet extends HttpServlet {
 		
 		// add the student to the database
 		accountDbUtil.addAccount(theAccount);
+		
+		// send the user home after a successful login
+		RequestDispatcher dispatcher = request.getRequestDispatcher("./home.jsp");
+		dispatcher.forward(request, response);
 	}
 }

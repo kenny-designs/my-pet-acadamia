@@ -36,7 +36,7 @@ public class AccountDbUtil {
 			myConn = dataSource.getConnection();
 			
 			// create sql for insert
-			String sql = "INSERT INTO account " +
+			String sql = "INSERT INTO accounts " +
 						"(username, password) " +
 						"values (?, ?)";
 			
