@@ -7,6 +7,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 /**
@@ -19,40 +22,6 @@ public class AccountDbUtil {
 	public AccountDbUtil(DataSource dataSource) {
 		super();
 		this.dataSource = dataSource;
-	}
-
-	/**
-	 * Attempts to add a new account to the database.
-	 * 
-	 * @param theStudent
-	 * @throws Exception
-	 */
-	public void addAccount(Account theAccount) throws Exception {
-		Connection myConn = null;
-		PreparedStatement myStmt = null;
-		
-		try {
-			// get db connection
-			myConn = dataSource.getConnection();
-			
-			// create sql for insert
-			String sql = "INSERT INTO accounts " +
-						"(username, password) " +
-						"values (?, ?)";
-			
-			myStmt = myConn.prepareStatement(sql);
-			
-			// set the param values for the student
-			myStmt.setString(1, theAccount.getUsername());
-			myStmt.setString(2, theAccount.getPassword());
-			
-			// execute sql insert
-			myStmt.execute();
-		}
-		finally {
-			// clean up JDBC objects
-			close(myConn, myStmt, null);
-		}
 	}
 
 	private void close(Connection myConn, PreparedStatement myStmt, ResultSet myRs) {
@@ -69,13 +38,14 @@ public class AccountDbUtil {
 	}
 
 	/**
-	 * Attempts to log the user into their account.
+	 * Attempt to log the user in.
 	 * 
-	 * @param theAccount
-	 * @return True if successful. False otherwise.
+	 * @param username
+	 * @param password
+	 * @return Account with the given username and password. Null if there is none.
 	 * @throws Exception
 	 */
-	public boolean loginAccount(Account theAccount) throws Exception {	
+	public Account loginAccount(String username, String password) throws Exception {
 		Connection myConn 		 = null;
 		PreparedStatement myStmt = null;
 		ResultSet myRs 			 = null;
@@ -91,23 +61,70 @@ public class AccountDbUtil {
 			myStmt = myConn.prepareStatement(sql);
 			
 			// set parameters
-			myStmt.setString(1, theAccount.getUsername());
-			myStmt.setString(2, theAccount.getPassword());
+			myStmt.setString(1, username);
+			myStmt.setString(2, password);
 			
 			// execute statement
 			myRs = myStmt.executeQuery();
 	
-			// if no student found, return false
-			if (!myRs.next()) return false;
+			// if no account found, return null
+			if (!myRs.next()) return null;
 		
-			// student found, get their id and return true
-			int id = myRs.getInt("id");
-			theAccount.setId(id);
-			return true;
+			// account found, return it	
+			Account theAccount = new Account(myRs.getString("username"),
+											 myRs.getString("password"),
+											 myRs.getInt("id"));			
+			
+			return theAccount;
 		}
 		finally {
 			// Cleanup JDBC objects
 			close(myConn, myStmt, myRs);
 		}		
+	}
+
+	/**
+	 * Retrieves the cookie associated with the logged in user.
+	 * 
+	 * @param request
+	 * @return Cookie for the logged in account. Null if none found.
+	 */
+	public Cookie getLoggedAccountCookie(HttpServletRequest request) {
+		Cookie[] cookies = request.getCookies();	
+		for (Cookie cookie : cookies) {
+			if (cookie.getName().equals("LOGGED_USER")) return cookie;
+		}
+	
+		return null;
+	}
+
+	public boolean addAccount(String username, String password) throws Exception {
+		Connection myConn 		 = null;
+		PreparedStatement myStmt = null;
+		
+		try {
+			// get db connection
+			myConn = dataSource.getConnection();
+			
+			// create sql for insert
+			String sql = "INSERT INTO accounts " +
+						 "(username, password) " +
+						 "values (?, ?)";
+			
+			myStmt = myConn.prepareStatement(sql);
+			
+			// set the param values for the student
+			myStmt.setString(1, username);
+			myStmt.setString(2, password);
+			
+			// execute sql insert
+			myStmt.execute();
+			
+			return true;
+		}
+		finally {
+			// clean up JDBC objects
+			close(myConn, myStmt, null);
+		}	
 	}
 }

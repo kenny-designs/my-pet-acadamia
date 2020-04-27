@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 /**
@@ -56,51 +57,91 @@ public class LoginControllerServlet extends HttpServlet {
 			case "LOGIN":
 				loginAccount(request, response);
 				break;
+			
+			// have user log out of their account
+			case "LOGOUT":
+				logoutAccount(request, response);
+				break;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
+	/**
+	 * Log the user out of their account. Brings them to the login page.
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
+	private void logoutAccount(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		// removes the LOGGED_USER attribute
+		HttpSession session = request.getSession();
+		session.removeAttribute("LOGGED_USER");
+		
+		// return to login screen
+		RequestDispatcher dispatcher = request.getRequestDispatcher("./index.jsp");
+		dispatcher.forward(request, response);
+	}
+
+	/**
+	 * Attempt to log the user into their account. Creates a cookie with account id.
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
 	private void loginAccount(HttpServletRequest request, HttpServletResponse response)
 		throws Exception {
 		// read user info from form data
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
-		
-		// create a new account object
-		Account theAccount = new Account(username, password);
-		
-		// attempt to log user into their account
-		boolean isValidUser = accountDbUtil.loginAccount(theAccount);
-		
+				
+		Account theAccount = accountDbUtil.loginAccount(username, password);
+			
 		// send the user home after a successful login
 		RequestDispatcher dispatcher = null;
-
-		if (isValidUser) {
+		if (theAccount != null) {		
+			// set attribute with account information
+			HttpSession session = request.getSession();
+			session.setAttribute("LOGGED_USER", theAccount);
+			
+			// go to home page
 			dispatcher = request.getRequestDispatcher("./home.jsp");
 		}
 		else {
+			// go to login page
 			dispatcher = request.getRequestDispatcher("./index.jsp");			
 		}
 		
 		dispatcher.forward(request, response);
 	}
 
+	/**
+	 * Create a new account. Upon success, log the user in.
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
 	private void addAccount(HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		// read user info from form data
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
-		
-		// create a new account object
-		Account theAccount = new Account(username, password);
-		
+			
 		// add the account to the database
-		accountDbUtil.addAccount(theAccount);
+		boolean isAdded = accountDbUtil.addAccount(username, password);
 		
-		// send the user home after a successful login
-		RequestDispatcher dispatcher = request.getRequestDispatcher("./home.jsp");
-		dispatcher.forward(request, response);
+		if (!isAdded) {			
+			RequestDispatcher dispatcher = request.getRequestDispatcher("./create-account.jsp");
+			dispatcher.forward(request, response);
+		}
+		else {
+			// now that the account is made, log the user in
+			loginAccount(request, response);
+		}
 	}
 }
