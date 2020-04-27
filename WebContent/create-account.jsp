@@ -10,19 +10,38 @@
 
 <h1>Create a new account!</h1>
 
-<form action="./">
+<form action="LoginControllerServlet" method="POST">
+	<input type="hidden" name="command" value="CREATE_ACCOUNT" />
+
 	<table>
 		<tbody>
 			<tr>
 				<td><label>Username: </label></td>
-				<td><input type="text" name="username" /></td>
+				<td>
+					<input 
+						type="text"
+						name="username" 
+						maxlength="32"
+						minlength="3"
+						required
+					/>
+				</td>
 			</tr>
 			
 			<tr>
 				<td><label>Password: </label></td>
-				<td><input type="text" name="password" /></td>
-			</tr>			
-			
+				<td>
+					<input
+						type="password"
+						name="password"
+						maxlength="32"
+						minlength="8"
+						required
+					/>
+				</td>
+			</tr>
+		
+		<!--
 			<tr>		
 				<td><label>Pet: </label></td>
 				<td>
@@ -40,7 +59,8 @@
 					<label for="chuck">Chuck</label>
 				</td>
 			</tr>
-							
+			-->
+					
 			<tr>
 				<td><label></label></td>
 				<td><input type="submit" value="Create Account" /></td>
