@@ -80,3 +80,36 @@ VALUES ('heavyweight', 1, 23),
 
 UNLOCK TABLES;
 
+--------------
+-- PETS TABLE
+--------------
+
+-- Basic pet information table
+DROP TABLE IF EXISTS pets;
+CREATE TABLE pets(
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	name VARCHAR(32) NOT NULL UNIQUE,
+	health_type VARCHAR(12) NOT NULL,
+	image VARCHAR(255) NOT NULL UNIQUE,
+	skill_1_id INT,
+	skill_2_id INT,
+	skill_3_id INT,
+	skill_4_id INT
+);
+
+-- Add pet data
+LOCK TABLES pets WRITE;
+
+INSERT INTO pets (name, health_type, image)
+VALUES ('Pachino',  'heavyweight',  'pachino.png'),
+	   ('Jujimufu', 'heavyweight',  'jujimufu.png'),
+	   ('Eric',     'heavyweight',  'eric.png'),
+	   ('Spiegel',  'lightweight',  'spiegel.png'),
+	   ('Lord',     'lightweight',  'lord.png'),
+	   ('Blowfeld', 'middleweight', 'blowfeld.png'),
+	   ('Cat', 		'middleweight', 'cat.png'),
+	   ('Chuck', 	'middleweight', 'chuck.png'),
+	   ('Weezer', 	'lightweight',  'weezer.png');
+ 
+UNLOCK TABLES;
+
