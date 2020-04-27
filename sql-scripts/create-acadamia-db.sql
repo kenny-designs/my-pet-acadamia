@@ -13,7 +13,7 @@ CREATE TABLE accounts(
 -- Dummy data for accounts table
 LOCK TABLES accounts WRITE;
 INSERT INTO accounts (username, password)
-VALUES ('kenny', 'pass'),
-	   ('ash', 'p3kachu'),
-	   ('tye', 'digimon');
+VALUES ('kenny', 'password'),
+	   ('ash', 'p3kachi123'),
+	   ('tye', 'digimonMun');
 UNLOCK TABLES;

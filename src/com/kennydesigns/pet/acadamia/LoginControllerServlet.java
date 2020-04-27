@@ -41,23 +41,62 @@ public class LoginControllerServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		try {
-			addAccount(request, response);
+		try {	
+			// read the 'command' parameter
+			String theCommand = request.getParameter("command");
+					
+			// perform action based on given command
+			switch  (theCommand) {
+			// create a new user account
+			case "CREATE_ACCOUNT":
+				addAccount(request, response);
+				break;
+			
+			// have user log into their account
+			case "LOGIN":
+				loginAccount(request, response);
+				break;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void addAccount(HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		// read student info from form data
+	private void loginAccount(HttpServletRequest request, HttpServletResponse response)
+		throws Exception {
+		// read user info from form data
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		
-		// create a new student object
+		// create a new account object
 		Account theAccount = new Account(username, password);
 		
-		// add the student to the database
+		// attempt to log user into their account
+		boolean isValidUser = accountDbUtil.loginAccount(theAccount);
+		
+		// send the user home after a successful login
+		RequestDispatcher dispatcher = null;
+
+		if (isValidUser) {
+			dispatcher = request.getRequestDispatcher("./home.jsp");
+		}
+		else {
+			dispatcher = request.getRequestDispatcher("./index.jsp");			
+		}
+		
+		dispatcher.forward(request, response);
+	}
+
+	private void addAccount(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		// read user info from form data
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		
+		// create a new account object
+		Account theAccount = new Account(username, password);
+		
+		// add the account to the database
 		accountDbUtil.addAccount(theAccount);
 		
 		// send the user home after a successful login

@@ -11,6 +11,8 @@
 <h1>Create a new account!</h1>
 
 <form action="LoginControllerServlet" method="POST">
+	<input type="hidden" name="command" value="CREATE_ACCOUNT" />
+
 	<table>
 		<tbody>
 			<tr>

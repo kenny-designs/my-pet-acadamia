@@ -11,6 +11,7 @@
 <h1>Boku No Pet Acadamia: Budokai Tenkaichi 3 Ultra Edition</h1>
 
 <form action="LoginControllerServlet" method="POST">
+	<input type="hidden" name="command" value="LOGIN" />
 	<table>
 		<tbody>
 			<tr>

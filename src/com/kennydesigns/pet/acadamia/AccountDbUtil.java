@@ -67,4 +67,47 @@ public class AccountDbUtil {
 			exc.printStackTrace();
 		}
 	}
+
+	/**
+	 * Attempts to log the user into their account.
+	 * 
+	 * @param theAccount
+	 * @return True if successful. False otherwise.
+	 * @throws Exception
+	 */
+	public boolean loginAccount(Account theAccount) throws Exception {	
+		Connection myConn 		 = null;
+		PreparedStatement myStmt = null;
+		ResultSet myRs 			 = null;
+		
+		try {			
+			// get connection to database
+			myConn = dataSource.getConnection();
+			
+			// create sql to get selected user
+			String sql = "SELECT * FROM accounts WHERE username=? AND password=?";
+			
+			// create prepared statement
+			myStmt = myConn.prepareStatement(sql);
+			
+			// set parameters
+			myStmt.setString(1, theAccount.getUsername());
+			myStmt.setString(2, theAccount.getPassword());
+			
+			// execute statement
+			myRs = myStmt.executeQuery();
+	
+			// if no student found, return false
+			if (!myRs.next()) return false;
+		
+			// student found, get their id and return true
+			int id = myRs.getInt("id");
+			theAccount.setId(id);
+			return true;
+		}
+		finally {
+			// Cleanup JDBC objects
+			close(myConn, myStmt, myRs);
+		}		
+	}
 }
