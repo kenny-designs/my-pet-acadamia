@@ -10,17 +10,33 @@
 
 <h1>Boku No Pet Acadamia: Budokai Tenkaichi 3 Ultra Edition</h1>
 
-<form action="./">
+<form action="LoginControllerServlet" method="POST">
 	<table>
 		<tbody>
 			<tr>
 				<td><label>Username: </label></td>
-				<td><input type="text" name="username" /></td>
+				<td>
+					<input 
+						type="text"
+						name="username" 
+						maxlength="32"
+						minlength="3"
+						required
+					/>
+				</td>
 			</tr>
 			
 			<tr>
 				<td><label>Password: </label></td>
-				<td><input type="text" name="password" /></td>
+				<td>
+					<input
+						type="password"
+						name="password"
+						maxlength="32"
+						minlength="8"
+						required
+					/>
+				</td>
 			</tr>
 							
 			<tr>
