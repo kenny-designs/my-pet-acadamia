@@ -12,6 +12,10 @@
 
 <h1>Boku No Pet Acadamia: Budokai Tenkaichi 3 Ultra Edition</h1>
 
+<c:if test="${LOGIN_FAILED}">
+	<p style="color: red;">Incorrect username and/or password!</p>
+</c:if>
+
 <form action="LoginControllerServlet" method="POST">
 	<input type="hidden" name="command" value="LOGIN" />
 	<table>

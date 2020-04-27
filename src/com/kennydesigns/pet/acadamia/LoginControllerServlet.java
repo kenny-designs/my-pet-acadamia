@@ -112,6 +112,9 @@ public class LoginControllerServlet extends HttpServlet {
 			dispatcher = request.getRequestDispatcher("./home.jsp");
 		}
 		else {
+			// set attribute saying login failed
+			request.setAttribute("LOGIN_FAILED", true);
+			
 			// go to login page
 			dispatcher = request.getRequestDispatcher("./index.jsp");			
 		}
