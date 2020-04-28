@@ -35,10 +35,11 @@
 			<form action="PetsControllerServlet" method="POST">
 				<input type="hidden" name="command" value="DELETE_PLAYER_PET" />
 				<input type="hidden" name="playerPetId" value="${tempPet.id}" />
-				
+			
 				<input type="submit"
 					   value="Delete Pet"
-					   onclick="return confirm('Wow! Are you really going to MURDER ${tempPet.pet.name}?')" />
+					   onclick="return confirm('Wow! Are you really going to MURDER ${tempPet.pet.name}?')"
+					   <c:if test="${PLAYER_PETS_LIST.size() == 1}">disabled</c:if> />
 			</form>		
 		</td>
 	</tr>
