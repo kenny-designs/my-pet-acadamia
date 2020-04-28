@@ -208,4 +208,35 @@ public class PetDbUtil {
 			close(myConn, myStmt, myRs);
 		}	
 	}
+
+	/**
+	 * Delete the player's pet based on the given id.
+	 * 
+	 * @param playerPetId
+	 */
+	public void deletePlayerPet(int playerPetId) throws Exception {
+		Connection myConn = null;
+		PreparedStatement myStmt = null;
+		
+		try {	
+			// get connection to database
+			myConn = dataSource.getConnection();
+			
+			// create sql to delete the player's pet
+			String sql = "DELETE FROM player_pets WHERE id=?";
+			
+			// prepare statement
+			myStmt = myConn.prepareStatement(sql);
+			
+			// set params
+			myStmt.setInt(1, playerPetId);
+			
+			// execute sql statement
+			myStmt.execute();
+		}
+		finally {
+			// clean up JDBC code
+			close(myConn, myStmt, null);
+		}
+	}
 }

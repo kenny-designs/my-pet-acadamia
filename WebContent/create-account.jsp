@@ -44,7 +44,7 @@
 			<tr>		
 				<td><label>Pet: </label></td>
 				<td>
-					<input type="radio" id="cat" name="petName" value="Cat">
+					<input type="radio" id="cat" name="petName" value="Cat" checked>
 					<label for="cat">Cat</label>
 				</td>
 				

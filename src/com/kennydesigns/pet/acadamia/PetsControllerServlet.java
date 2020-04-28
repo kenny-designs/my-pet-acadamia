@@ -72,14 +72,40 @@ public class PetsControllerServlet extends HttpServlet {
 					
 			// perform action based on given command
 			switch  (theCommand) {
-			// display all available pets in the game
+			// display all pets the player owns
 			case "MANAGE_TEAM":
 				manageAccountTeam(request, response);
+				break;
+				
+			// delete a pet that the player owns
+			case "DELETE_PLAYER_PET":
+				deletePlayerPet(request, response);
 				break;
 			}			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Removes a pet from a player's possession (that poor animal... Now they're
+	 * gone forever!)
+	 * TODO: make sure player can't delete their only pet
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
+	private void deletePlayerPet(HttpServletRequest request, HttpServletResponse response)
+		throws Exception {
+		// get the id of the player's pet
+		int playerPetId = Integer.parseInt(request.getParameter("playerPetId"));
+	
+		// delete the pet
+		petDbUtil.deletePlayerPet(playerPetId);
+		
+		// display the remaining pets the player owns
+		manageAccountTeam(request, response);
 	}
 
 	/**
