@@ -113,3 +113,36 @@ VALUES ('Pachino',  'heavyweight',  'pachino.png'),
  
 UNLOCK TABLES;
 
+---------------------
+-- PLAYER_PETS TABLE
+---------------------
+
+-- Collection of all pets in the game and their owners
+DROP TABLE IF EXISTS player_pets;
+CREATE TABLE player_pets(
+	id INT AUTO_INCREMENT PRIMARY KEY,	
+	level INT DEFAULT 1,
+	exp INT DEFAULT 0,
+	pet_id INT NOT NULL,
+	account_id INT NOT NULL,
+	FOREIGN KEY (pet_id) REFERENCES pets(id),
+	FOREIGN KEY (account_id) REFERENCES accounts(id)
+);
+
+-- Add dummy data for existing dummy accounts
+LOCK TABLES player_pets WRITE;
+
+INSERT INTO player_pets (level, pet_id, account_id)
+VALUES (4, 8, 1),
+	   (7, 3, 1),
+	   (9, 7, 1),
+	   (5, 1, 2),
+	   (1, 2, 2),
+	   (2, 5, 2),
+	   (2, 6, 3),
+	   (5, 5, 3),
+	   (7, 4, 3);
+ 
+UNLOCK TABLES;
+
+
