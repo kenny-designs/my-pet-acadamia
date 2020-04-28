@@ -59,7 +59,8 @@ public class PetDbUtil {
 				Pet tempPet = new Pet(myRs.getInt("id"),
 									  myRs.getString("name"),
 									  myRs.getString("health_type"),
-									  myRs.getString("image"));
+									  myRs.getString("image"),
+									  myRs.getString("description"));
 				
 				pets.add(tempPet);
 			}
@@ -106,7 +107,8 @@ public class PetDbUtil {
 			Pet thePet = new Pet(myRs.getInt("id"),
 								 myRs.getString("name"),
 								 myRs.getString("health_type"),
-								 myRs.getString("image"));
+								 myRs.getString("image"),
+								 myRs.getString("description"));
 			
 			return thePet;
 		}
@@ -195,6 +197,7 @@ public class PetDbUtil {
 				PlayerPet tempPlayerPet = new PlayerPet(myRs.getInt("id"),
 													    myRs.getInt("level"),
 													    myRs.getInt("exp"),
+													    myRs.getBoolean("is_team"),
 													    tempPet,
 													    theAccount);
 					

@@ -88,6 +88,7 @@ CREATE TABLE pets(
 	name VARCHAR(32) NOT NULL UNIQUE,
 	health_type VARCHAR(12) NOT NULL,
 	image VARCHAR(255) NOT NULL UNIQUE,
+	description VARCHAR(255) NOT NULL UNIQUE,
 	skill_1_id INT,
 	skill_2_id INT,
 	skill_3_id INT,
@@ -97,16 +98,16 @@ CREATE TABLE pets(
 -- Add pet data
 LOCK TABLES pets WRITE;
 
-INSERT INTO pets (name, health_type, image)
-VALUES ('Pachino',  'heavyweight',  'pachino.png'),
-	   ('Jujimufu', 'heavyweight',  'jujimufu.png'),
-	   ('Eric',     'heavyweight',  'eric.png'),
-	   ('Spiegel',  'lightweight',  'spiegel.png'),
-	   ('Lord',     'lightweight',  'lord.png'),
-	   ('Blowfeld', 'middleweight', 'blowfeld.png'),
-	   ('Cat', 		'middleweight', 'cat.png'),
-	   ('Chuck', 	'middleweight', 'chuck.png'),
-	   ('Weezer', 	'lightweight',  'weezer.png');
+INSERT INTO pets (name, health_type, image, description)
+VALUES ('Pachino',  'heavyweight',  'pachino.png', 'A powerful bird-like pet! Prefers to strike from the sky with its claws and disrupt the battle with its powerful wings. Some say it looks a bit too real...'),
+	   ('Jujimufu', 'heavyweight',  'jujimufu.png', 'An incredibly fat snake. Could eat you whole if it could catch up... For what they lack in agility, the Jujimufu mesmerizes its foes and leaves a lethal bite!'),
+	   ('Eric',     'heavyweight',  'eric.png', 'Eric is a gigantic bear and perhaps one of the most fearsome competitors in the entire Boku No Pet Acadamia: Budokai Tenkaichi 3 Ultra Edition universe! Eric charges in full force without a care and often leaves disaster in its wake.'),
+	   ('Spiegel',  'lightweight',  'spiegel.png', 'This little fella is not much but will leave its foes in devastation with a combination of poison and needles! In case of an emergency, the spiky Spiegel will explode and bring everyone down with it. See you sea fish boy...'),
+	   ('Lord',     'lightweight',  'lord.png', 'A slimy, snail-like creature. Despite appearing so small and fragile, Lords are able to disorient their enemies and harden their shells to protect against even the nastiest of attacks. Also really likes listening to Lorde.'),
+	   ('Blowfeld', 'middleweight', 'blowfeld.png', 'An adorable little creature with a devastating poison! The Blowfeld uses its powerful claws to hurt others and stuff. DO NOT MESS WITH THEM! They are angry.'),
+	   ('Cat', 		'middleweight', 'cat.png', 'A normal, everyday house cat. What kind of sick monster would make their own pet cat fight other animals?'),
+	   ('Chuck', 	'middleweight', 'chuck.png', 'The purest of all creatures! Can hold their own quite well but prefers peace and tranquility. If at all possible, the Chuck will befriend their foes and leave the battle to some other pet.'),
+	   ('Weezer', 	'lightweight',  'weezer.png', 'In the Perfect Situation, Weezer prefers to fight from the skies! Sadly, they are notably much weaker than their flying counter-parts such as the Pachino. To make up for this, Weezers prefer mending their wounds and mesmerizing the competition.');
  
 UNLOCK TABLES;
 
@@ -117,6 +118,7 @@ CREATE TABLE player_pets(
 	id INT AUTO_INCREMENT PRIMARY KEY,	
 	level INT DEFAULT 1,
 	exp INT DEFAULT 0,
+	is_team BIT DEFAULT 0,
 	pet_id INT NOT NULL,
 	account_id INT NOT NULL,
 	FOREIGN KEY (pet_id) REFERENCES pets(id),
@@ -126,17 +128,17 @@ CREATE TABLE player_pets(
 -- Add dummy data for existing dummy accounts
 LOCK TABLES player_pets WRITE;
 
-INSERT INTO player_pets (level, pet_id, account_id)
-VALUES (4, 8, 1),
-	   (7, 3, 1),
-	   (9, 7, 1),
-	   (2, 3, 1),
-	   (5, 1, 2),
-	   (1, 2, 2),
-	   (2, 5, 2),
-	   (2, 6, 3),
-	   (5, 5, 3),
-	   (7, 4, 3);
+INSERT INTO player_pets (level, pet_id, account_id, is_team)
+VALUES (4, 8, 1, 1),
+	   (7, 3, 1, 1),
+	   (9, 7, 1, 1),
+	   (2, 3, 1, 0),
+	   (5, 1, 2, 1),
+	   (1, 2, 2, 1),
+	   (2, 5, 2, 1),
+	   (2, 6, 3, 1),
+	   (5, 5, 3, 1),
+	   (7, 4, 3, 1);
  
 UNLOCK TABLES;
 

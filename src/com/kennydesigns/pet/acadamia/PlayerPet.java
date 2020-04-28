@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.kennydesigns.pet.acadamia;
 
 /**
@@ -12,13 +9,24 @@ public class PlayerPet {
 	private int id;
 	private int level;
 	private int exp;
+	private boolean team;
 	private Pet pet;
 	private Account account;
 	
-	public PlayerPet(int id, int level, int exp, Pet pet, Account account) {
+	/**
+	 * @param id
+	 * @param level
+	 * @param exp
+	 * @param isTeam
+	 * @param pet
+	 * @param account
+	 */
+	public PlayerPet(int id, int level, int exp, boolean team, Pet pet, Account account) {
+		super();
 		this.id = id;
 		this.level = level;
 		this.exp = exp;
+		this.team = team;
 		this.pet = pet;
 		this.account = account;
 	}
@@ -91,5 +99,19 @@ public class PlayerPet {
 	 */
 	public void setAccount(Account account) {
 		this.account = account;
+	}
+
+	/**
+	 * @return the team
+	 */
+	public boolean isTeam() {
+		return team;
+	}
+
+	/**
+	 * @param team the team to set
+	 */
+	public void setTeam(boolean team) {
+		this.team = team;
 	}
 }

@@ -13,19 +13,26 @@ public class Pet {
 	private String name;
 	private String healthType;
 	private String imageURL;
+	private String description;
+
+	
 	
 	/**
 	 * @param id
 	 * @param name
 	 * @param healthType
 	 * @param imageURL
+	 * @param description
 	 */
-	public Pet(int id, String name, String healthType, String imageURL) {
+	public Pet(int id, String name, String healthType, String imageURL, String description) {
+		super();
 		this.id = id;
 		this.name = name;
 		this.healthType = healthType;
 		this.imageURL = imageURL;
+		this.description = description;
 	}
+	
 	/**
 	 * @return the id
 	 */
@@ -73,5 +80,17 @@ public class Pet {
 	 */
 	public void setImageURL(String imageURL) {
 		this.imageURL = imageURL;
+	}
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
 	}	
 }
