@@ -41,25 +41,23 @@
 				</td>
 			</tr>
 		
-		<!--
 			<tr>		
 				<td><label>Pet: </label></td>
 				<td>
-					<input type="radio" id="cat" name="pet" value="cat">
+					<input type="radio" id="cat" name="petName" value="Cat">
 					<label for="cat">Cat</label>
 				</td>
 				
 				<td>
-					<input type="radio" id="weezer" name="pet" value="weezer">
+					<input type="radio" id="weezer" name="petName" value="Weezer">
 					<label for="weezer">Weezer</label>
 				</td>
 				
 				<td>
-					<input type="radio" id="chuck" name="pet" value="chuck">
+					<input type="radio" id="chuck" name="petName" value="Chuck">
 					<label for="chuck">Chuck</label>
 				</td>
 			</tr>
-			-->
 					
 			<tr>
 				<td><label></label></td>

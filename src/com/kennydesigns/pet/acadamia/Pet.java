@@ -5,7 +5,7 @@ package com.kennydesigns.pet.acadamia;
 
 /**
  * @author crowly
- *
+ * Holds basic information about each collectable pet.
  */
 public class Pet {
 	// TODO: add skills

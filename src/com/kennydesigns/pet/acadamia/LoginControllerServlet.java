@@ -20,7 +20,8 @@ import javax.sql.DataSource;
 public class LoginControllerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 		
-	private AccountDbUtil accountDbUtil;
+	private AccountDbUtil accountDbUtil;	
+	private PetDbUtil petDbUtil;
 
 	@Resource(name="jdbc/pet_acadamia_db")
 	private DataSource dataSource;
@@ -31,6 +32,7 @@ public class LoginControllerServlet extends HttpServlet {
 		
 		try {
 			accountDbUtil = new AccountDbUtil(dataSource);
+			petDbUtil = new PetDbUtil(dataSource);
 		}
 		catch (Exception exc) {
 			throw new ServletException(exc);
@@ -126,9 +128,10 @@ public class LoginControllerServlet extends HttpServlet {
 	 * 
 	 * @param request
 	 * @param response
+	 * @return The logged in account. Null if not successful
 	 * @throws Exception
 	 */
-	private void loginAccount(HttpServletRequest request, HttpServletResponse response)
+	private Account loginAccount(HttpServletRequest request, HttpServletResponse response)
 		throws Exception {
 		// read user info from form data
 		String username = request.getParameter("username");
@@ -155,6 +158,7 @@ public class LoginControllerServlet extends HttpServlet {
 		}
 		
 		dispatcher.forward(request, response);
+		return theAccount;
 	}
 
 	/**
@@ -169,17 +173,23 @@ public class LoginControllerServlet extends HttpServlet {
 		// read user info from form data
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
+		String petName  = request.getParameter("petName");
 			
 		// add the account to the database
 		boolean isAdded = accountDbUtil.addAccount(username, password);
 		
-		if (!isAdded) {			
+		if (!isAdded) {
+			// couldn't create account, have the user try again
+			// TODO: let the user know if account creation was a failure
 			RequestDispatcher dispatcher = request.getRequestDispatcher("./create-account.jsp");
 			dispatcher.forward(request, response);
 		}
 		else {
-			// now that the account is made, log the user in
-			loginAccount(request, response);
+			// now that the account is made, log the user in and give them
+			// their chosen pet
+			Account theAccount = loginAccount(request, response);
+			Pet thePet = petDbUtil.getPetFromName(petName);
+			petDbUtil.addPetToAccount(theAccount, thePet);
 		}
 	}
 }

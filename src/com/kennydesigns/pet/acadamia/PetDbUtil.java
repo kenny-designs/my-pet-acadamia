@@ -4,6 +4,7 @@
 package com.kennydesigns.pet.acadamia;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -67,6 +68,86 @@ public class PetDbUtil {
 		}
 		finally {
 			close(myConn, myStmt, myRs);
+		}	
+	}
+
+	/**
+	 * Returns the pet associated with the given name.
+	 * 
+	 * @param petName
+	 * @return Pet object if it is found. False otherwise.
+	 * @throws Exception
+	 */
+	public Pet getPetFromName(String petName) throws Exception {
+		Connection        myConn = null;
+		PreparedStatement myStmt = null;
+		ResultSet         myRs   = null;
+		
+		try {			
+			// get connection to database
+			myConn = dataSource.getConnection();
+			
+			// create sql to get the pet
+			String sql = "SELECT * FROM pets WHERE name=?";
+			
+			// create prepared statement
+			myStmt = myConn.prepareStatement(sql);
+			
+			// set parameters
+			myStmt.setString(1, petName);
+			
+			// execute statement
+			myRs = myStmt.executeQuery();
+	
+			// if no pet found, return null
+			if (!myRs.next()) return null;
+		
+			// pet found, return it	
+			Pet thePet = new Pet(myRs.getInt("id"),
+								 myRs.getString("name"),
+								 myRs.getString("health_type"),
+								 myRs.getString("image"));
+			
+			return thePet;
+		}
+		finally {
+			// Cleanup JDBC objects
+			close(myConn, myStmt, myRs);
+		}
+	}
+
+	/**
+	 * Adds a fresh level 1 pet of the given type to the given player account.
+	 * 
+	 * @param theAccount
+	 * @param thePet
+	 * @throws Exception
+	 */
+	public void addPetToAccount(Account theAccount, Pet thePet) throws Exception {
+		Connection 		  myConn = null;
+		PreparedStatement myStmt = null;
+		
+		try {
+			// get db connection
+			myConn = dataSource.getConnection();
+			
+			// create sql for insert
+			String sql = "INSERT INTO player_pets " +
+						 "(pet_id, account_id) " +
+						 "VALUES (?, ?)";
+			
+			myStmt = myConn.prepareStatement(sql);
+			
+			// set the param values for the student
+			myStmt.setInt(1, thePet.getId());
+			myStmt.setInt(2, theAccount.getId());
+			
+			// execute sql insert
+			myStmt.execute();	
+		}
+		finally {
+			// clean up JDBC objects
+			close(myConn, myStmt, null);
 		}	
 	}
 }

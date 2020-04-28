@@ -107,7 +107,7 @@ public class AccountDbUtil {
 			// create sql for insert
 			String sql = "INSERT INTO accounts " +
 						 "(username, password) " +
-						 "values (?, ?)";
+						 "VALUES (?, ?)";
 			
 			myStmt = myConn.prepareStatement(sql);
 			

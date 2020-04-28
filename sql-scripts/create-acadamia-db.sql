@@ -2,12 +2,15 @@
 CREATE DATABASE IF NOT EXISTS pet_acadamia_db;
 USE pet_acadamia_db;
 
-------------------
+-- DROP TABLES
+DROP TABLE IF EXISTS player_pets;
+DROP TABLE IF EXISTS pets;
+DROP TABLE IF EXISTS accounts;
+DROP TABLE IF EXISTS health_types;
+
 -- ACCOUNTS TABLE
-------------------
 
 -- User account information
-DROP TABLE IF EXISTS accounts;
 CREATE TABLE accounts(
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	username VARCHAR(32) NOT NULL UNIQUE,
@@ -24,12 +27,9 @@ VALUES ('kenny', 'password', 34, 4),
 	   ('tye', 'digimonMun', 420, 69);
 UNLOCK TABLES;
 
-----------------------
 -- HEALTH_TYPES TABLE
-----------------------
 
 -- Health types and the amount of health provided at the given level
-DROP TABLE IF EXISTS health_types;
 CREATE TABLE health_types(
 	health_type VARCHAR(12) NOT NULL,
 	level INT NOT NULL,
@@ -80,12 +80,9 @@ VALUES ('heavyweight', 1, 23),
 
 UNLOCK TABLES;
 
---------------
 -- PETS TABLE
---------------
 
 -- Basic pet information table
-DROP TABLE IF EXISTS pets;
 CREATE TABLE pets(
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(32) NOT NULL UNIQUE,
@@ -113,12 +110,9 @@ VALUES ('Pachino',  'heavyweight',  'pachino.png'),
  
 UNLOCK TABLES;
 
----------------------
 -- PLAYER_PETS TABLE
----------------------
 
 -- Collection of all pets in the game and their owners
-DROP TABLE IF EXISTS player_pets;
 CREATE TABLE player_pets(
 	id INT AUTO_INCREMENT PRIMARY KEY,	
 	level INT DEFAULT 1,
