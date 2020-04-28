@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 /**
@@ -58,6 +59,51 @@ public class PetsControllerServlet extends HttpServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		try {	
+			// read the 'command' parameter
+			String theCommand = request.getParameter("command");
+					
+			// perform action based on given command
+			switch  (theCommand) {
+			// display all available pets in the game
+			case "MANAGE_TEAM":
+				manageAccountTeam(request, response);
+				break;
+			}			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Allow the owner of the account to manage their team.
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
+	private void manageAccountTeam(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		// get the currently logged in account
+		HttpSession session = request.getSession();
+		Account theAccount = (Account)session.getAttribute("LOGGED_USER");
+	
+		// get all the pets belonging to the account
+		List<PlayerPet> playerPets = petDbUtil.getAccountPlayerPets(theAccount);
+		
+		// add the list of the player's pets to the request
+		request.setAttribute("PLAYER_PETS_LIST", playerPets);	
+		
+		// display manage-team.jsp page
+		RequestDispatcher dispatcher = request.getRequestDispatcher("./manage-team.jsp");
+		dispatcher.forward(request, response);
 	}
 
 	/**

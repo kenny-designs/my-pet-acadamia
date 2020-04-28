@@ -18,8 +18,11 @@
 	<input type="submit" value="Stats" />
 </form>
 
-<a href="./manage-team.jsp">Manage Team</a>
-<br />
+<form action="PetsControllerServlet" method="POST">
+	<input type="hidden" name="command" value="MANAGE_TEAM" />
+	<input type="submit" value="Manage Team" />
+</form>
+
 <a href="./safari.jsp">Safari</a>
 <br />
 <a href="./battledome.jsp">Battledome</a>

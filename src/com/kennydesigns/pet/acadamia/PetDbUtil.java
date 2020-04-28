@@ -150,4 +150,62 @@ public class PetDbUtil {
 			close(myConn, myStmt, null);
 		}	
 	}
+
+	/**
+	 * Return a list of all of the pets belonging to the currently logged in account.
+	 * 
+	 * @param theAccount
+	 * @return
+	 */
+	public List<PlayerPet> getAccountPlayerPets(Account theAccount) 
+			throws Exception {
+		List<PlayerPet> playerPets = new ArrayList<>();
+
+		Connection myConn        = null;
+		PreparedStatement myStmt = null;
+		ResultSet myRs           = null;
+
+		try {
+			myConn = dataSource.getConnection();
+
+			// selects all pets that the account owns
+			String sql = "SELECT player_pets.*, pets.name " +
+						 "FROM player_pets " +
+						 "	INNER JOIN accounts " +
+						 "	ON player_pets.account_id = accounts.id " +
+						 "	INNER JOIN pets " +
+						 "	ON player_pets.pet_id = pets.id " +
+						 "WHERE accounts.id = ? " +
+						 "ORDER BY pets.id";
+
+			// create prepared statement
+			myStmt = myConn.prepareStatement(sql);
+
+			// set parameters
+			myStmt.setInt(1, theAccount.getId());
+
+			// execute statement
+			myRs = myStmt.executeQuery();
+
+			while (myRs.next()) {
+				// get the associated pet
+				Pet tempPet = getPetFromName(myRs.getString("name"));
+
+				// create a new player pet object
+				PlayerPet tempPlayerPet = new PlayerPet(myRs.getInt("id"),
+													    myRs.getInt("level"),
+													    myRs.getInt("exp"),
+													    tempPet,
+													    theAccount);
+					
+				// add the pet to the list of the account's pets
+				playerPets.add(tempPlayerPet);
+			}
+
+			return playerPets;
+		}
+		finally {
+			close(myConn, myStmt, myRs);
+		}	
+	}
 }

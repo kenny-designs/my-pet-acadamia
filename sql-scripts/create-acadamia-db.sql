@@ -130,6 +130,7 @@ INSERT INTO player_pets (level, pet_id, account_id)
 VALUES (4, 8, 1),
 	   (7, 3, 1),
 	   (9, 7, 1),
+	   (2, 3, 1),
 	   (5, 1, 2),
 	   (1, 2, 2),
 	   (2, 5, 2),
