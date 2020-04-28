@@ -15,6 +15,7 @@
 
 <a href="./home.jsp">Return Home</a>
 
+<div class="pet-flex-container">
 <c:forEach var="tempPet" items="${PET_LIST}">
 	<div class="card">
 	  <img src="./images/${tempPet.imageURL}" alt="PetImage" style="width:100%">
@@ -27,6 +28,7 @@
 	  </div>
 	</div>
 </c:forEach>
+</div>
 
 </body>
 </html>

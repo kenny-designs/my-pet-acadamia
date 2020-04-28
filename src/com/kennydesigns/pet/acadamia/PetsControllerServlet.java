@@ -62,6 +62,25 @@ public class PetsControllerServlet extends HttpServlet {
 	}
 
 	/**
+	 * Removes a pet from the player's team.
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
+	private void removePetFromTeam(HttpServletRequest request, HttpServletResponse response)
+		throws Exception {
+		// get the id of the player's pet
+		int playerPetId = Integer.parseInt(request.getParameter("playerPetId"));
+	
+		// update pet so that it is no longer a part of the team
+		petDbUtil.removePetFromteam(playerPetId);
+		
+		// display the pets the player owns again
+		manageAccountTeam(request, response);
+	}
+
+	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -81,6 +100,11 @@ public class PetsControllerServlet extends HttpServlet {
 			case "DELETE_PLAYER_PET":
 				deletePlayerPet(request, response);
 				break;
+				
+			// remove pet from player's team
+			case "REMOVE_PET_FROM_TEAM":
+				removePetFromTeam(request, response);
+				break;	
 			}			
 		} catch (Exception e) {
 			e.printStackTrace();

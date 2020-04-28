@@ -242,4 +242,33 @@ public class PetDbUtil {
 			close(myConn, myStmt, null);
 		}
 	}
+
+	public void removePetFromteam(int playerPetId) throws Exception {
+		Connection myConn = null;
+		PreparedStatement myStmt = null;
+		
+		try {	
+			// get connection to database
+			myConn = dataSource.getConnection();
+			
+			// create sql to delete the player's pet
+			String sql = "UPDATE player_pets " +
+						 "SET is_team=? " +
+						 "WHERE id=?";
+						
+			// prepare statement
+			myStmt = myConn.prepareStatement(sql);
+			
+			// set params
+			myStmt.setBoolean(1, false);
+			myStmt.setInt(2, playerPetId);
+			
+			// execute sql statement
+			myStmt.execute();
+		}
+		finally {
+			// clean up JDBC code
+			close(myConn, myStmt, null);
+		}
+	}
 }
