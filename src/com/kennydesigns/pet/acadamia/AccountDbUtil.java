@@ -19,7 +19,6 @@ public class AccountDbUtil {
 	private DataSource dataSource;
 
 	public AccountDbUtil(DataSource dataSource) {
-		super();
 		this.dataSource = dataSource;
 	}
 
@@ -27,8 +26,6 @@ public class AccountDbUtil {
 		try {
 			if (myRs   != null)   myRs.close();
 			if (myStmt != null) myStmt.close();
-
-			// Doesn't close the connection, just puts it back in the connection pool
 			if (myConn != null) myConn.close();
 		}
 		catch(Exception exc) {
@@ -110,7 +107,7 @@ public class AccountDbUtil {
 			// create sql for insert
 			String sql = "INSERT INTO accounts " +
 						 "(username, password) " +
-						 "values (?, ?)";
+						 "VALUES (?, ?)";
 			
 			myStmt = myConn.prepareStatement(sql);
 			

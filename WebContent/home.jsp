@@ -12,18 +12,25 @@
 
 <h1>Welcome Home ${LOGGED_USER.username}!</h1>
 
-<br />
 <form action="LoginControllerServlet" method="GET">
 	<input type="hidden" name="command" value="DISPLAY_ACCOUNT_STATS" />
 	<input type="hidden" name="username" value="${LOGGED_USER.username}" />
 	<input type="submit" value="Stats" />
 </form>
-<br />
-<a href="./manage-team.jsp">Manage Team</a>
-<br />
+
+<form action="PetsControllerServlet" method="POST">
+	<input type="hidden" name="command" value="MANAGE_TEAM" />
+	<input type="submit" value="Manage Team" />
+</form>
+
 <a href="./safari.jsp">Safari</a>
 <br />
 <a href="./battledome.jsp">Battledome</a>
+
+<form action="PetsControllerServlet" method="GET">
+	<input type="hidden" name="command" value="DISPLAY_ALL_PETS" />
+	<input type="submit" value="View PetWiki" />
+</form>
 
 <form action="LoginControllerServlet" method="POST">
 	<input type="hidden" name="command" value="LOGOUT" />
