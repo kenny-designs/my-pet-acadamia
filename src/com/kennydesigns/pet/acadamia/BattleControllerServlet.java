@@ -1,6 +1,7 @@
 package com.kennydesigns.pet.acadamia;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -90,11 +91,13 @@ public class BattleControllerServlet extends HttpServlet {
 		List<PlayerPet> playerPets = petDbUtil.getAccountsTeam(theAccount);
 		
 		// create list of battle pets based on player's team
+		List<BattlePet> battlePets = new ArrayList<>();
 		for (PlayerPet pp : playerPets ) {
-			BattlePet battlePet = battleDbUtil.createBattlePet(pp);
+			battlePets.add(battleDbUtil.createBattlePet(pp));
 		}
 		
-		// add player pets to team instance
+		// add player's battle pets to team instance
+		int teamId = battleDbUtil.createPlayerTeam(battlePets);
 		
 		// create safari battle pet
 		

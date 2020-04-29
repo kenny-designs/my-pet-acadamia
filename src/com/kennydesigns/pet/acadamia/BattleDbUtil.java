@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -177,5 +178,59 @@ public class BattleDbUtil {
 			// Cleanup JDBC objects
 			close(myConn, myStmt, myRs);
 		}	
+	}
+
+	/**
+	 * Adds a new team_instance to the database based on the given battle pets
+	 * 
+	 * @param battlePets
+	 * @return ID of the newly created team.
+	 */
+	public int createPlayerTeam(List<BattlePet> battlePets) throws Exception {
+		Connection 		  myConn = null;
+		PreparedStatement myStmt = null;
+		ResultSet         myRs   = null;
+		
+		try {
+			// get db connection
+			myConn = dataSource.getConnection();
+			
+			// create sql for insert
+			String sql = "INSERT INTO team_instances " +
+						 "(battle_pet_1_id, battle_pet_2_id, battle_pet_3_id) " +
+						 "VALUES (?, ?, ?)";
+		
+			// return the id of the insertion
+			myStmt = myConn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+			// get the size of the team
+			int teamSize = battlePets.size();
+	
+			// throw exception if team size is wrong
+			if (teamSize < 1 || teamSize > 3) {
+				throw new Exception("Team cannot be of size " + teamSize + "!");
+			}
+			
+			// set the param values for team
+			myStmt.setInt(1, battlePets.get(0).getId());
+			myStmt.setInt(2, teamSize >= 2 ? battlePets.get(1).getId() : null);
+			myStmt.setInt(3, teamSize == 3 ? battlePets.get(2).getId() : null);
+			
+			// execute sql insert
+			myStmt.execute();
+			
+			// get the id of the inserted battle pet
+			myRs = myStmt.getGeneratedKeys();
+			
+			// if failed, return -1
+			if (!myRs.next()) return -1;
+			
+			// return id of the team instance
+			return myRs.getInt(1);		
+		}
+		finally {
+			// clean up JDBC objects
+			close(myConn, myStmt, null);
+		}		
 	}
 }
