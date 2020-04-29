@@ -17,6 +17,7 @@ import javax.sql.DataSource;
 
 /**
  * Servlet implementation class PetsControllerServlet
+ * Handles pet related requests.
  */
 @WebServlet("/PetsControllerServlet")
 public class PetsControllerServlet extends HttpServlet {

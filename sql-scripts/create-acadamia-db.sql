@@ -232,8 +232,8 @@ CREATE TABLE player_battle_instances(
 -- Ongoing player versus player battles
 CREATE TABLE safari_battle_instances(
 	id INT AUTO_INCREMENT PRIMARY KEY,	
-	player_team_id INT NOT NULL,
-	safari_team_id INT NOT NULL,
+	player_team_id INT NOT NULL UNIQUE,
+	safari_team_id INT NOT NULL UNIQUE,
 	FOREIGN KEY (player_team_id) REFERENCES team_instances(id),
 	FOREIGN KEY (safari_team_id) REFERENCES team_instances(id)
 );
