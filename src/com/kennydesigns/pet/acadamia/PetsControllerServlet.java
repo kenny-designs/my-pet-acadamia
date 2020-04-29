@@ -174,7 +174,7 @@ public class PetsControllerServlet extends HttpServlet {
 		List<PlayerPet> petCollection = petDbUtil.getAccountPlayerPets(theAccount);
 	
 		// separate pets on a team from the rest of the collection
-		List<PlayerPet> currentTeam   = new ArrayList<>();
+		List<PlayerPet> currentTeam = new ArrayList<>();
 		for (int i = 0; i < petCollection.size();) {
 			if (petCollection.get(i).isTeam()) {	
 				currentTeam.add(petCollection.remove(i));

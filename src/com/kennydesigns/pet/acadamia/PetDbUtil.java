@@ -123,9 +123,11 @@ public class PetDbUtil {
 	 * 
 	 * @param theAccount
 	 * @param thePet
+	 * @param bTeam
 	 * @throws Exception
 	 */
-	public void addPetToAccount(Account theAccount, Pet thePet) throws Exception {
+	public void addPetToAccount(Account theAccount, Pet thePet, boolean bTeam)
+			throws Exception {
 		Connection 		  myConn = null;
 		PreparedStatement myStmt = null;
 		
@@ -135,14 +137,15 @@ public class PetDbUtil {
 			
 			// create sql for insert
 			String sql = "INSERT INTO player_pets " +
-						 "(pet_id, account_id) " +
-						 "VALUES (?, ?)";
+						 "(pet_id, account_id, is_team) " +
+						 "VALUES (?, ?, ?)";
 			
 			myStmt = myConn.prepareStatement(sql);
 			
 			// set the param values for the student
 			myStmt.setInt(1, thePet.getId());
 			myStmt.setInt(2, theAccount.getId());
+			myStmt.setBoolean(3, bTeam);
 			
 			// execute sql insert
 			myStmt.execute();	
