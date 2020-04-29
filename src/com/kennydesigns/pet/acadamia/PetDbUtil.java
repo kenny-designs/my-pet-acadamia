@@ -243,7 +243,7 @@ public class PetDbUtil {
 		}
 	}
 
-	public void removePetFromteam(int playerPetId) throws Exception {
+	public void setPlayerPetTeam(int playerPetId, boolean bTeam) throws Exception {
 		Connection myConn = null;
 		PreparedStatement myStmt = null;
 		
@@ -260,7 +260,7 @@ public class PetDbUtil {
 			myStmt = myConn.prepareStatement(sql);
 			
 			// set params
-			myStmt.setBoolean(1, false);
+			myStmt.setBoolean(1, bTeam);
 			myStmt.setInt(2, playerPetId);
 			
 			// execute sql statement
