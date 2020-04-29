@@ -274,4 +274,29 @@ public class PetDbUtil {
 			close(myConn, myStmt, null);
 		}
 	}
+
+	/**
+	 * Gets a list of player pets belonging to a player that is on their team
+	 * 
+	 * @param theAccount
+	 * @return
+	 * @throws Exception
+	 */
+	public List<PlayerPet> getAccountsTeam(Account theAccount)
+		throws Exception {
+		List<PlayerPet> petCollection = getAccountPlayerPets(theAccount);
+
+		// separate pets on a team from the rest of the collection
+		List<PlayerPet> currentTeam = new ArrayList<>();
+		for (int i = 0; i < petCollection.size();) {
+			if (petCollection.get(i).isTeam()) {	
+				currentTeam.add(petCollection.remove(i));
+			}
+			else {
+				i++;
+			}
+		}
+
+		return currentTeam;
+	}
 }

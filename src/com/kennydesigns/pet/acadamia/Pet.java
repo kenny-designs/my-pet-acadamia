@@ -13,9 +13,7 @@ public class Pet {
 	private String name;
 	private String healthType;
 	private String imageURL;
-	private String description;
-
-	
+	private String description;	
 	
 	/**
 	 * @param id

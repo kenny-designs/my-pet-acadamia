@@ -12,6 +12,8 @@
 
 <h1>Safari</h1>
 
+<a href="./home.jsp">Return Home</a>
+
 <c:choose>
 	<c:when test="${HAS_SAFARI_BATTLE}">
 		<h3>You have a battle going!</h3>
@@ -19,13 +21,12 @@
 	
 	<c:otherwise>
 		<h3>No battle. Find one?</h3>
+		<form action="BattleControllerServlet" method="POST">
+			<input type="hidden" name="command" value="NEW_SAFARI_BATTLE" />
+			<input type="submit" value="Fight Random Pet!" />
+		</form>
 	</c:otherwise>
 </c:choose>
-
-
-<a href="./safari-battle.jsp">Train in Safari</a>
-<br />
-<a href="./home.jsp">Return Home</a>
 
 </body>
 </html>

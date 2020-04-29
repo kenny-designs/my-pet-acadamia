@@ -1,6 +1,7 @@
 package com.kennydesigns.pet.acadamia;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.RequestDispatcher;
@@ -22,6 +23,7 @@ public class BattleControllerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 		
 	private BattleDbUtil battleDbUtil;
+	private PetDbUtil petDbUtil;
 
 	@Resource(name="jdbc/pet_acadamia_db")
 	private DataSource dataSource;
@@ -32,6 +34,7 @@ public class BattleControllerServlet extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 		try {
 			battleDbUtil = new BattleDbUtil(dataSource);
+			petDbUtil = new PetDbUtil(dataSource);
 		}
 		catch (Exception exc) {
 			throw new ServletException(exc);
@@ -59,11 +62,49 @@ public class BattleControllerServlet extends HttpServlet {
 			switch (theCommand) {
 			case "ENTER_SAFARI":
 				enterSafari(request, response);
+				break;
+				
+			case "NEW_SAFARI_BATTLE":
+				newSafariBattle(request, response);
 				break;			
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Begins a new safari battle instance for the player.
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
+	private void newSafariBattle(HttpServletRequest request, HttpServletResponse response)
+		throws Exception {
+		// get the currently logged in account
+		HttpSession session = request.getSession();
+		Account theAccount = (Account)session.getAttribute("LOGGED_USER");
+
+		// get the logged in account's team
+		List<PlayerPet> playerPets = petDbUtil.getAccountsTeam(theAccount);
+		
+		// create list of battle pets based on player's team
+		for (PlayerPet pp : playerPets ) {
+			BattlePet battlePet = battleDbUtil.createBattlePet(pp);
+		}
+		
+		// add player pets to team instance
+		
+		// create safari battle pet
+		
+		// add safari pet to team instance
+		
+		// add both teams to a new safari battle instance
+		
+		// display safari battle page
+		RequestDispatcher dispatcher = request.getRequestDispatcher("./safari-battle.jsp");
+		dispatcher.forward(request, response);
 	}
 
 	/**
@@ -83,7 +124,7 @@ public class BattleControllerServlet extends HttpServlet {
 		boolean isInSafari = battleDbUtil.isAccountInSafari(theAccount);
 		request.setAttribute("HAS_SAFARI_BATTLE", isInSafari);
 
-		// display user statistics
+		// display safari page
 		RequestDispatcher dispatcher = request.getRequestDispatcher("./safari.jsp");
 		dispatcher.forward(request, response);
 	}

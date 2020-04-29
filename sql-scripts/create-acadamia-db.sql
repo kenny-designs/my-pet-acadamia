@@ -146,7 +146,6 @@ CREATE TABLE player_pets(
 
 -- Add dummy data for existing dummy accounts
 LOCK TABLES player_pets WRITE;
-
 INSERT INTO player_pets (level, pet_id, account_id, is_team)
 VALUES (4, 8, 1, 1),
 	   (7, 3, 1, 1),
@@ -157,8 +156,7 @@ VALUES (4, 8, 1, 1),
 	   (2, 5, 2, 1),
 	   (2, 6, 3, 1),
 	   (5, 5, 3, 1),
-	   (7, 4, 3, 1);
- 
+	   (7, 4, 3, 1); 
 UNLOCK TABLES;
 
 -- SAFARI_PETS TABLE
@@ -170,13 +168,19 @@ CREATE TABLE safari_pets(
 	FOREIGN KEY (pet_id) REFERENCES pets(id)
 );
 
+-- Add all pets available to fight in the safari
+LOCK TABLES safari_pets WRITE;
+INSERT INTO safari_pets (level, pet_id)
+VALUES (1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (6, 1), (7, 1), (8, 1), (9, 1), (10, 1);
+UNLOCK TABLES;
+
 -- BATTLE_PETS TABLE
 -- All pets that are currently fighting (both player owned and NPC)
 CREATE TABLE battle_pets(
 	id INT AUTO_INCREMENT PRIMARY KEY,	
 	hitpoints INT NOT NULL,
-	player_pet_id INT,
-	safari_pet_id INT,
+	player_pet_id INT DEFAULT NULL,
+	safari_pet_id INT DEFAULT NULL,
 	FOREIGN KEY (player_pet_id) REFERENCES player_pets(id),
 	FOREIGN KEY (safari_pet_id) REFERENCES safari_pets(id)
 );
