@@ -91,15 +91,21 @@ public class BattleControllerServlet extends HttpServlet {
 		List<PlayerPet> playerPets = petDbUtil.getAccountsTeam(theAccount);
 		
 		// create list of battle pets based on player's team
+		// also find the average level of the team
+		int avgLevel = 0;
 		List<BattlePet> battlePets = new ArrayList<>();
 		for (PlayerPet pp : playerPets ) {
 			battlePets.add(battleDbUtil.createBattlePet(pp));
+			avgLevel += pp.getLevel();
 		}
 		
-		// add player's battle pets to team instance
-		int teamId = battleDbUtil.createPlayerTeam(battlePets);
+		avgLevel /= battlePets.size();
 		
-		// create safari battle pet
+		// add player's battle pets to team instance
+		int teamId = battleDbUtil.createBattlePetTeam(battlePets);
+		
+		// create safari battle pet of the player's average level
+		BattlePet safariPet = battleDbUtil.createSafariBattlePet(avgLevel);
 		
 		// add safari pet to team instance
 		

@@ -186,7 +186,7 @@ public class BattleDbUtil {
 	 * @param battlePets
 	 * @return ID of the newly created team.
 	 */
-	public int createPlayerTeam(List<BattlePet> battlePets) throws Exception {
+	public int createBattlePetTeam(List<BattlePet> battlePets) throws Exception {
 		Connection 		  myConn = null;
 		PreparedStatement myStmt = null;
 		ResultSet         myRs   = null;
@@ -222,8 +222,10 @@ public class BattleDbUtil {
 			// get the id of the inserted battle pet
 			myRs = myStmt.getGeneratedKeys();
 			
-			// if failed, return -1
-			if (!myRs.next()) return -1;
+			// if no id found, throw an exception
+			if (!myRs.next()) {
+				throw new Exception("Could not create a new battle pet team!");
+			}
 			
 			// return id of the team instance
 			return myRs.getInt(1);		
@@ -232,5 +234,49 @@ public class BattleDbUtil {
 			// clean up JDBC objects
 			close(myConn, myStmt, null);
 		}		
+	}
+
+	/**
+	 * Creates a random safari battle pet of the given level.
+	 * 
+	 * @param level
+	 * @return Safari battle pet of given level.
+	 */
+	public BattlePet createSafariBattlePet(int level) throws Exception {
+		Connection        myConn = null;
+		PreparedStatement myStmt = null;
+		ResultSet         myRs   = null;
+		
+		try {			
+			// get connection to database
+			myConn = dataSource.getConnection();
+			
+			// create sql to get the safari battle pet
+			String sql = "SELECT * FROM safari_pets WHERE level=?";
+			
+			// create prepared statement
+			myStmt = myConn.prepareStatement(sql);
+			
+			// set parameters
+			myStmt.setInt(1, level);
+			
+			// execute statement
+			myRs = myStmt.executeQuery();
+	
+			// if no pet found, throw exception
+			if (!myRs.next()) {
+				throw new Exception("Cannot find safari pet of level " + level + "!");
+			}
+		
+			// pet found, return it	
+			//Pet thePet = new PlayerPet(myRs.getInt("id"));
+			
+			//return thePet;
+			return null;
+		}
+		finally {
+			// Cleanup JDBC objects
+			close(myConn, myStmt, myRs);
+		}	
 	}
 }
