@@ -40,42 +40,39 @@ public class BattleDbUtil {
 	 * @param theAccount
 	 * @return True is the account is in a battle. False otherwise.
 	 */
-	public boolean isAccountInSafari(Account theAccount) {
+	public boolean isAccountInSafari(Account theAccount)
+		throws Exception {
 		Connection        myConn = null;
 		PreparedStatement myStmt = null;
 		ResultSet         myRs   = null;
 		
 		try {			
-			/*
 			// get connection to database
 			myConn = dataSource.getConnection();
 			
 			// create sql to check if the account has a battle
-			String sql = "SELECT * FROM safari_battle_instances WHERE player=?";
+			String sql =
+					"SELECT safari_battle_instances.id " +
+					"FROM safari_battle_instances " +
+					"	INNER JOIN team_instances " +
+					"	ON safari_battle_instances.player_team_id = team_instances.id " +
+					"	INNER JOIN battle_pets " +
+					"	ON team_instances.battle_pet_1_id = battle_pets.id " +
+					"	INNER JOIN player_pets " +
+					"	ON battle_pets.player_pet_id = player_pets.id " +
+					"WHERE player_pets.account_id = ?";
 			
 			// create prepared statement
 			myStmt = myConn.prepareStatement(sql);
 			
 			// set parameters
-			myStmt.setString(1, petName);
+			myStmt.setInt(1, theAccount.getId());
 			
 			// execute statement
 			myRs = myStmt.executeQuery();
-	
-			// if no pet found, return null
-			if (!myRs.next()) return null;
-		
-			// pet found, return it	
-			Pet thePet = new Pet(myRs.getInt("id"),
-								 myRs.getString("name"),
-								 myRs.getString("health_type"),
-								 myRs.getString("image"),
-								 myRs.getString("description"));
-			
-			return thePet;
-			*/
-			
-			return false;
+
+			// if true, then the account has a safari battle tied to it
+			return myRs.next();
 		}
 		finally {
 			// Cleanup JDBC objects
