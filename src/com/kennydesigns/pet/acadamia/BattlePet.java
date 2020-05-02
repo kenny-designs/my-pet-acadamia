@@ -10,14 +10,41 @@ package com.kennydesigns.pet.acadamia;
 public class BattlePet {
 	private int id;
 	private int hitPoints;
-	private PlayerPet playerPet;
-	// TODO: see about adding safari pets
-	//private SafariPet safariPet;
+	private int level;
+	private Pet pet;
 	
+	// only used if a player controls this battle pet
+	private PlayerPet playerPet = null;
+
+	/**
+	 * Constructor used for when there is no account tied to this battle pet.
+	 * 
+	 * @param id
+	 * @param hitPoints
+	 * @param level
+	 * @param pet
+	 */
+	public BattlePet(int id, int hitPoints, int level, Pet pet) {
+		super();
+		this.id = id;
+		this.hitPoints = hitPoints;
+		this.level = level;
+		this.pet = pet;
+	}
+
+	/**
+	 * Constructor used for creating battle pet from a player pet.
+	 * 
+	 * @param id
+	 * @param hitPoints
+	 * @param playerPet
+	 */
 	public BattlePet(int id, int hitPoints, PlayerPet playerPet) {
 		super();
 		this.id = id;
 		this.hitPoints = hitPoints;
+		this.level = playerPet.getLevel();
+		this.pet = playerPet.getPet();
 		this.playerPet = playerPet;
 	}
 
@@ -47,6 +74,34 @@ public class BattlePet {
 	 */
 	public void setHitPoints(int hitPoints) {
 		this.hitPoints = hitPoints;
+	}
+
+	/**
+	 * @return the level
+	 */
+	public int getLevel() {
+		return level;
+	}
+
+	/**
+	 * @param level the level to set
+	 */
+	public void setLevel(int level) {
+		this.level = level;
+	}
+
+	/**
+	 * @return the pet
+	 */
+	public Pet getPet() {
+		return pet;
+	}
+
+	/**
+	 * @param pet the pet to set
+	 */
+	public void setPet(Pet pet) {
+		this.pet = pet;
 	}
 
 	/**

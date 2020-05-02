@@ -93,23 +93,26 @@ public class BattleControllerServlet extends HttpServlet {
 		// create list of battle pets based on player's team
 		// also find the average level of the team
 		int avgLevel = 0;
-		List<BattlePet> battlePets = new ArrayList<>();
+		List<BattlePet> playerBattlePets = new ArrayList<>();
 		for (PlayerPet pp : playerPets ) {
-			battlePets.add(battleDbUtil.createBattlePet(pp));
+			playerBattlePets.add(battleDbUtil.createBattlePet(pp));
 			avgLevel += pp.getLevel();
 		}
 		
-		avgLevel /= battlePets.size();
+		avgLevel /= playerBattlePets.size();
 		
 		// add player's battle pets to team instance
-		int teamId = battleDbUtil.createBattlePetTeam(battlePets);
+		int playerTeamId = battleDbUtil.createBattlePetTeam(playerBattlePets);
 		
-		// create safari battle pet of the player's average level
-		BattlePet safariPet = battleDbUtil.createSafariBattlePet(avgLevel);
+		// create safari battle pet of the player's average level		
+		List<BattlePet> safariBattlePets = new ArrayList<>();
+		safariBattlePets.add(battleDbUtil.createSafariBattlePet(avgLevel, petDbUtil));
 		
-		// add safari pet to team instance
+		// add safari pet to team instance		
+		int safariTeamId = battleDbUtil.createBattlePetTeam(safariBattlePets);
 		
 		// add both teams to a new safari battle instance
+		battleDbUtil.createSafariBattleInstance(playerTeamId, safariTeamId);
 		
 		// display safari battle page
 		RequestDispatcher dispatcher = request.getRequestDispatcher("./safari-battle.jsp");

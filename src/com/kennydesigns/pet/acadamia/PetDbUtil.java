@@ -299,4 +299,51 @@ public class PetDbUtil {
 
 		return currentTeam;
 	}
+
+	/**
+	 * Returns the pet associated with the given id.
+	 * 
+	 * @param id
+	 * @return The pet matching the id
+	 */
+	public Pet getPetFromId(int id) throws Exception {
+		Connection        myConn = null;
+		PreparedStatement myStmt = null;
+		ResultSet         myRs   = null;
+		
+		try {			
+			// get connection to database
+			myConn = dataSource.getConnection();
+			
+			// create sql to get the pet based on id
+			String sql = "SELECT * FROM pets WHERE id=?";
+			
+			// create prepared statement
+			myStmt = myConn.prepareStatement(sql);
+			
+			// set parameters
+			myStmt.setInt(1, id);
+			
+			// execute statement
+			myRs = myStmt.executeQuery();
+	
+			// if no pet found, throw an exception
+			if (!myRs.next()) {
+				throw new Exception("Could not find pet with id: " + id);
+			}
+		
+			// pet found, return it	
+			Pet thePet = new Pet(myRs.getInt("id"),
+								 myRs.getString("name"),
+								 myRs.getString("health_type"),
+								 myRs.getString("image"),
+								 myRs.getString("description"));
+			
+			return thePet;
+		}
+		finally {
+			// Cleanup JDBC objects
+			close(myConn, myStmt, myRs);
+		}
+	}
 }

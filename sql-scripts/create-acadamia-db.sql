@@ -162,8 +162,7 @@ UNLOCK TABLES;
 -- SAFARI_PETS TABLE
 -- Collection of all pets in the safari
 CREATE TABLE safari_pets(
-	id INT AUTO_INCREMENT PRIMARY KEY,	
-	level INT DEFAULT 1,
+	level INT NOT NULL,
 	pet_id INT NOT NULL,
 	FOREIGN KEY (pet_id) REFERENCES pets(id)
 );
@@ -179,10 +178,11 @@ UNLOCK TABLES;
 CREATE TABLE battle_pets(
 	id INT AUTO_INCREMENT PRIMARY KEY,	
 	hitpoints INT NOT NULL,
+	level INT NOT NULL,
 	player_pet_id INT DEFAULT NULL,
-	safari_pet_id INT DEFAULT NULL,
+	pet_id INT NOT NULL,
 	FOREIGN KEY (player_pet_id) REFERENCES player_pets(id),
-	FOREIGN KEY (safari_pet_id) REFERENCES safari_pets(id)
+	FOREIGN KEY (pet_id) REFERENCES pets(id)
 );
 
 -- DAMAGES TABLE
