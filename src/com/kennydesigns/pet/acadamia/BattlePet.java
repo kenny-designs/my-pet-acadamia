@@ -18,6 +18,7 @@ public class BattlePet {
 
 	/**
 	 * Constructor used for when there is no account tied to this battle pet.
+	 * Use this constructor for non-player owned pets.
 	 * 
 	 * @param id
 	 * @param hitPoints
@@ -31,9 +32,28 @@ public class BattlePet {
 		this.level = level;
 		this.pet = pet;
 	}
+	
+	/**
+	 * Constructor used for creating battle pet from a player pet and given level.
+	 * Use this constructor if the battle pet already exists within the database.
+	 * 
+	 * @param id
+	 * @param hitPoints
+	 * @param playerPet
+	 */
+	public BattlePet(int id, int hitPoints, int level, PlayerPet playerPet) {
+		super();
+		this.id = id;
+		this.hitPoints = hitPoints;
+		this.level = level;
+		this.pet = playerPet.getPet();
+		this.playerPet = playerPet;
+	}
+
 
 	/**
-	 * Constructor used for creating battle pet from a player pet.
+	 * Constructor used for creating battle pet from a player pet. Use this constructor
+	 * if it's a brand new battle pet that was just added to the database.
 	 * 
 	 * @param id
 	 * @param hitPoints

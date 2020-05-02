@@ -25,6 +25,7 @@ public class BattleControllerServlet extends HttpServlet {
 		
 	private BattleDbUtil battleDbUtil;
 	private PetDbUtil petDbUtil;
+	private AccountDbUtil accountDbUtil;	
 
 	@Resource(name="jdbc/pet_acadamia_db")
 	private DataSource dataSource;
@@ -36,18 +37,11 @@ public class BattleControllerServlet extends HttpServlet {
 		try {
 			battleDbUtil = new BattleDbUtil(dataSource);
 			petDbUtil = new PetDbUtil(dataSource);
+			accountDbUtil = new AccountDbUtil(dataSource);
 		}
 		catch (Exception exc) {
 			throw new ServletException(exc);
 		}
-	}
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
@@ -102,17 +96,17 @@ public class BattleControllerServlet extends HttpServlet {
 			return;
 		}
 		
-		int playerTeamId = battleDbUtil.getPlayerTeamId(safariBattleInstanceId);
-		
-		// get everything related to the player
-		Team playerTeam = battleDbUtil.getTeamFromId(playerTeamId);
-			
+		// get everything related to the player's battle pets team
+		int playerTeamId = battleDbUtil.getPlayerTeamId(safariBattleInstanceId);		
+		Team playerTeam = battleDbUtil.getTeamFromId(playerTeamId, petDbUtil, accountDbUtil);
+					
+		// get everything related to the safari battle pets team
 		int safariTeamId = battleDbUtil.getSafariTeamId(safariBattleInstanceId);
-		
-		// get everything related to the safari pet
-		Team safariTeam = null;
-		
-		// display team information to the player
+		Team safariTeam = battleDbUtil.getTeamFromId(safariTeamId, petDbUtil, accountDbUtil);
+
+		// set attribute for both the player and safari team
+		request.setAttribute("PLAYER_TEAM", playerTeam);
+		request.setAttribute("SAFARI_TEAM", safariTeam);
 		
 		// display safari battle page
 		RequestDispatcher dispatcher = request.getRequestDispatcher("./safari-battle.jsp");
@@ -167,10 +161,9 @@ public class BattleControllerServlet extends HttpServlet {
 		
 		// add both teams to a new safari battle instance
 		battleDbUtil.createSafariBattleInstance(playerTeamId, safariTeamId);
-		
-		// display safari battle page
-		RequestDispatcher dispatcher = request.getRequestDispatcher("./safari-battle.jsp");
-		dispatcher.forward(request, response);
+	
+		// load in the battle
+		loadSafariBattle(request, response);
 	}
 
 	/**

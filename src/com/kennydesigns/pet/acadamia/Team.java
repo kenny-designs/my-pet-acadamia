@@ -25,6 +25,15 @@ public class Team {
 	}
 
 	/**
+	 * returns the currently active battle pet
+	 * 
+	 * @return The active battle pet.
+	 */
+	public BattlePet getActiveBattlePet() {
+		return battlePets.get(0);
+	}
+
+	/**
 	 * @return the battlePets
 	 */
 	public List<BattlePet> getBattlePets() {

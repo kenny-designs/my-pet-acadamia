@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -15,23 +16,9 @@ import javax.sql.DataSource;
  * @author crowly
  * Handles battle database related work.
  */
-public class BattleDbUtil {
-	private DataSource dataSource;
-
+public class BattleDbUtil extends DbUtil {
 	public BattleDbUtil(DataSource dataSource) {
-		this.dataSource = dataSource;
-	}
-
-	// TODO: make database parent class
-	private void close(Connection myConn, Statement myStmt, ResultSet myRs) {
-		try {
-			if (myRs   != null)   myRs.close();
-			if (myStmt != null) myStmt.close();
-			if (myConn != null) myConn.close();
-		}
-		catch(Exception exc) {
-			exc.printStackTrace();
-		}
+		super(dataSource);
 	}
 
 	/**
@@ -63,22 +50,19 @@ public class BattleDbUtil {
 					"WHERE player_pets.account_id = ?";
 			
 			// create prepared statement
-			myStmt = myConn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			myStmt = myConn.prepareStatement(sql);
 			
 			// set parameters
 			myStmt.setInt(1, theAccount.getId());
 			
 			// execute statement
 			myRs = myStmt.executeQuery();
-					
-			// get the id of the inserted battle pet
-			myRs = myStmt.getGeneratedKeys();
-			
+								
 			// if nothing is found, return -1
 			if (!myRs.next()) return -1;	
 		
 			// success! return id of the safari_battle_instance
-			return myRs.getInt(1);	
+			return myRs.getInt("safari_battle_instances.id");	
 		}
 		finally {
 			// Cleanup JDBC objects
@@ -514,9 +498,12 @@ public class BattleDbUtil {
 	 * Creates a team object based on the given team id.
 	 * 
 	 * @param teamId
+	 * @param petDbUtil 
+	 * @param accountDbUtil 
 	 * @return The team from the given id.
 	 */
-	public Team getTeamFromId(int teamId) throws Exception {		
+	public Team getTeamFromId(int teamId, PetDbUtil petDbUtil, AccountDbUtil accountDbUtil)
+			throws Exception {		
 		Connection        myConn = null;
 		PreparedStatement myStmt = null;
 		ResultSet         myRs   = null;
@@ -540,12 +527,89 @@ public class BattleDbUtil {
 	
 			// if no team found, throw exception
 			if (!myRs.next()) {
-				throw new Exception(
-						"Cannot randomly find team with id " + teamId + "!");
+				throw new Exception("Cannot find team with id " + teamId + "!");
+			}	
+			
+			// TODO: finish this!
+			List<BattlePet> battlePets = new ArrayList<>();
+			for (int i = 1; i <= 3; i++) {
+				int battlePetId = myRs.getInt("battle_pet_" + i + "_id");
+				if (battlePetId == 0) break;
+
+				// get battlepet from id
+				BattlePet bp = getBattlePetFromId(battlePetId, petDbUtil, accountDbUtil);		
+				
+				// add to list
+				battlePets.add(bp);
 			}
+			
+			// create and return the team
+			return new Team(teamId, battlePets);
+		}
+		finally {
+			// Cleanup JDBC objects
+			close(myConn, myStmt, myRs);
+		}	
+	}
+
+	/**
+	 * Creates a new battle pet object based on the given id.
+	 * 
+	 * @param id
+	 * @param petDbUtil 
+	 * @param accountDbUtil 
+	 * @return Battle pet from the given id.
+	 */
+	private BattlePet getBattlePetFromId(int id, PetDbUtil petDbUtil, AccountDbUtil accountDbUtil)
+			throws Exception {
+		Connection        myConn = null;
+		PreparedStatement myStmt = null;
+		ResultSet         myRs   = null;
 		
-			// TODO: return an actual team!
-			return null;
+		try {
+			// get connection to database
+			myConn = dataSource.getConnection();
+			
+			// create sql to get the battle pet
+			String sql = "SELECT * FROM battle_pets " +
+						 "WHERE id=?";
+			
+			// create prepared statement
+			myStmt = myConn.prepareStatement(sql);
+			
+			// set parameters
+			myStmt.setInt(1, id);
+			
+			// execute statement
+			myRs = myStmt.executeQuery();
+	
+			// if no pet found, throw exception
+			if (!myRs.next()) {
+				throw new Exception("Cannot find battle pet with id " + id + "!");
+			}
+			
+			BattlePet battlePet;
+			int level = myRs.getInt("level");
+			
+			int playerPetId = myRs.getInt("player_pet_id");
+			if (playerPetId != 0) {
+				PlayerPet playerPet = petDbUtil.getPlayerPetFromId(playerPetId, accountDbUtil);
+				battlePet = new BattlePet(
+						id,
+						getHitpointTotal(playerPet.getPet(), level),
+						level,
+						playerPet);
+			}
+			else {				
+				Pet pet = petDbUtil.getPetFromId(myRs.getInt("pet_id"));
+				battlePet = new BattlePet(
+						id,
+						getHitpointTotal(pet, level),
+						level,
+						pet);
+			}
+				
+			return battlePet;
 		}
 		finally {
 			// Cleanup JDBC objects

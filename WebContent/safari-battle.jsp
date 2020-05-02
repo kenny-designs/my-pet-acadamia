@@ -15,30 +15,32 @@
 
 <a href="./home.jsp">Return Home</a>
 
-<!-- TODO: get pets to display correctly -->
+<c:set var="playerBattlePet" scope="request" value="${PLAYER_TEAM.getActiveBattlePet()}"/>
 <div class="pet-flex-container">
-<c:forEach var="tempPet" items="${PLAYER_PETS_TEAM}">
 	<div class="card">
-	  <img src="./images/${tempPet.pet.imageURL}" alt="PetImage" style="width:100%">
+	  <img src="./images/${playerBattlePet.pet.imageURL}" alt="PetImage" style="width:100%">
 	  <div class="container">
-		<h1><b>${tempPet.pet.name}</b></h1> 
-	
-		<form action="PetsControllerServlet" method="POST">
-			<input type="hidden" name="command" value="REMOVE_PET_FROM_TEAM" />
-			<input type="hidden" name="playerPetId" value="${tempPet.id}" />		
-			<input type="submit" value="Remove"
-			<c:if test="${PLAYER_PETS_TEAM.size() == 1}">disabled</c:if> />
-		</form>
-		
+		<h1><b>${playerBattlePet.pet.name}</b></h1> 
+			
 		<hr />
-		<p>Health Type: ${tempPet.pet.healthType}</p> 
-		<p>Level: ${tempPet.level}</p>
-		<p>Experience Points: ${tempPet.exp}</p>
-		<hr />
-		<p><em>${tempPet.pet.description}</em></p>
+		<p>HP: ${playerBattlePet.hitPoints}</p> 
+		<p>Level: ${playerBattlePet.level}</p>
 	  </div>
 	</div>
-</c:forEach>
+</div>
+
+<c:set var="safariBattlePet" scope="request" value="${SAFARI_TEAM.getActiveBattlePet()}"/>
+<div class="pet-flex-container">
+	<div class="card">
+	  <img src="./images/${safariBattlePet.pet.imageURL}" alt="PetImage" style="width:100%">
+	  <div class="container">
+		<h1><b>${safariBattlePet.pet.name}</b></h1> 
+			
+		<hr />
+		<p>HP: ${safariBattlePet.hitPoints}</p> 
+		<p>Level: ${safariBattlePet.level}</p>
+	  </div>
+	</div>
 </div>
 
 </body>

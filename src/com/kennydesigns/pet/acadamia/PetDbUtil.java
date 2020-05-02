@@ -16,23 +16,9 @@ import javax.sql.DataSource;
  * @author crowly
  *
  */
-public class PetDbUtil {
-	private DataSource dataSource;
-
+public class PetDbUtil extends DbUtil {
 	public PetDbUtil(DataSource dataSource) {
-		this.dataSource = dataSource;
-	}
-
-	// TODO: make database parent class
-	private void close(Connection myConn, Statement myStmt, ResultSet myRs) {
-		try {
-			if (myRs   != null)   myRs.close();
-			if (myStmt != null) myStmt.close();
-			if (myConn != null) myConn.close();
-		}
-		catch(Exception exc) {
-			exc.printStackTrace();
-		}
+		super(dataSource);
 	}
 
 	/**
@@ -340,6 +326,57 @@ public class PetDbUtil {
 								 myRs.getString("description"));
 			
 			return thePet;
+		}
+		finally {
+			// Cleanup JDBC objects
+			close(myConn, myStmt, myRs);
+		}
+	}
+
+	/**
+	 * Creates a player pet object based on the given id.
+	 * @param accountDbUtil 
+	 * 
+	 * @param playerPetId
+	 * @return PlayerPet from the id.
+	 */
+	public PlayerPet getPlayerPetFromId(int id, AccountDbUtil accountDbUtil)
+		throws Exception {
+		Connection        myConn = null;
+		PreparedStatement myStmt = null;
+		ResultSet         myRs   = null;
+		
+		try {			
+			// get connection to database
+			myConn = dataSource.getConnection();
+			
+			// create sql to get the pet based on id
+			String sql = "SELECT * FROM player_pets WHERE id=?";
+			
+			// create prepared statement
+			myStmt = myConn.prepareStatement(sql);
+			
+			// set parameters
+			myStmt.setInt(1, id);
+			
+			// execute statement
+			myRs = myStmt.executeQuery();
+	
+			// if no pet found, throw an exception
+			if (!myRs.next()) {
+				throw new Exception("Could not find player pet with id: " + id);
+			}
+		
+			// player pet found, return it				
+			PlayerPet playerPet = new PlayerPet(
+					myRs.getInt("id"),
+					myRs.getInt("level"),
+					myRs.getInt("exp"),
+					myRs.getBoolean("is_team"),
+					getPetFromId(myRs.getInt("pet_id")),
+					accountDbUtil.getAccountFromId(myRs.getInt("account_id")));
+			
+			return playerPet;
 		}
 		finally {
 			// Cleanup JDBC objects
