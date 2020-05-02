@@ -9,7 +9,7 @@
 <title>My Pet Acadamia: Safari Battle</title>
 <link type="text/css" rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="battle-bg">
 
 <h1>Safari Battle</h1>
 
