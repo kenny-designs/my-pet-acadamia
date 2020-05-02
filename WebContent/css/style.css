@@ -27,3 +27,14 @@
 	flex-wrap: wrap;
 	align-items: center;
 }
+
+/* Battle Related Styles */
+.pet-battle-container {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-evenly;
+}
+
+.health-bar {
+	/*width: auto;*/
+}

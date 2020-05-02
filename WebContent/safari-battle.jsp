@@ -16,29 +16,37 @@
 <a href="./home.jsp">Return Home</a>
 
 <c:set var="playerBattlePet" scope="request" value="${PLAYER_TEAM.getActiveBattlePet()}"/>
-<div class="pet-flex-container">
+<div class="pet-battle-container">
 	<div class="card">
 	  <img src="./images/${playerBattlePet.pet.imageURL}" alt="PetImage" style="width:100%">
 	  <div class="container">
-		<h1><b>${playerBattlePet.pet.name}</b></h1> 
-			
+		<h1>${playerBattlePet.pet.name} <em>lvl. ${playerBattlePet.level}</em></h1> 
+		<label for="player-hp">
+			Hp: ${playerBattlePet.hitpoints} / ${playerBattlePet.maxHitpoints}
+		</label>	
+		<progress id="player-hp"
+				  class="health-bar"
+				  value="${playerBattlePet.hitpoints}"
+				  max="${playerBattlePet.maxHitpoints}">
+		</progress>
 		<hr />
-		<p>HP: ${playerBattlePet.hitPoints}</p> 
-		<p>Level: ${playerBattlePet.level}</p>
 	  </div>
 	</div>
-</div>
 
 <c:set var="safariBattlePet" scope="request" value="${SAFARI_TEAM.getActiveBattlePet()}"/>
-<div class="pet-flex-container">
 	<div class="card">
 	  <img src="./images/${safariBattlePet.pet.imageURL}" alt="PetImage" style="width:100%">
 	  <div class="container">
-		<h1><b>${safariBattlePet.pet.name}</b></h1> 
-			
+		<h1>${safariBattlePet.pet.name} <em>lvl. ${safariBattlePet.level}</em></h1> 	
+		<label for="safari-hp">
+			Hp: ${safariBattlePet.hitpoints} / ${safariBattlePet.maxHitpoints}
+		</label>	
+		<progress id="safari-hp"
+				  class="health-bar"
+				  value="${safariBattlePet.hitpoints}"
+				  max="${safariBattlePet.maxHitpoints}">
+		</progress>
 		<hr />
-		<p>HP: ${safariBattlePet.hitPoints}</p> 
-		<p>Level: ${safariBattlePet.level}</p>
 	  </div>
 	</div>
 </div>

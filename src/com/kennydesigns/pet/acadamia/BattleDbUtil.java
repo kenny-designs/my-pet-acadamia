@@ -91,16 +91,17 @@ public class BattleDbUtil extends DbUtil {
 			
 			// create sql for insert
 			String sql = "INSERT INTO battle_pets " +
-						 "(hitpoints, level, pet_id) " +
-						 "VALUES (?, ?, ?)";
+						 "(hitpoints, max_hitpoints, level, pet_id) " +
+						 "VALUES (?, ?, ?, ?)";
 		
 			// return the id of the insertion
 			myStmt = myConn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			
 			// set the param values for battle pet
 			myStmt.setInt(1, hitpoints);
-			myStmt.setInt(2, level);
-			myStmt.setInt(3, pet.getId());
+			myStmt.setInt(2, hitpoints);
+			myStmt.setInt(3, level);
+			myStmt.setInt(4, pet.getId());
 			
 			// execute sql insert
 			myStmt.execute();
@@ -140,8 +141,8 @@ public class BattleDbUtil extends DbUtil {
 			
 			// create sql for insert
 			String sql = "INSERT INTO battle_pets " +
-						 "(hitpoints, player_pet_id, level, pet_id) " +
-						 "VALUES (?, ?, ?, ?)";
+						 "(hitpoints, max_hitpoints, player_pet_id, level, pet_id) " +
+						 "VALUES (?, ?, ?, ?, ?)";
 		
 			// return the id of the insertion
 			myStmt = myConn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -151,9 +152,10 @@ public class BattleDbUtil extends DbUtil {
 			
 			// set the param values for battle pet
 			myStmt.setInt(1, hitpoints);
-			myStmt.setInt(2, playerPet.getId());
-			myStmt.setInt(3, playerPet.getLevel());
-			myStmt.setInt(4, playerPet.getPet().getId());
+			myStmt.setInt(2, hitpoints);
+			myStmt.setInt(3, playerPet.getId());
+			myStmt.setInt(4, playerPet.getLevel());
+			myStmt.setInt(5, playerPet.getPet().getId());
 			
 			// execute sql insert
 			myStmt.execute();
@@ -590,23 +592,25 @@ public class BattleDbUtil extends DbUtil {
 			
 			BattlePet battlePet;
 			int level = myRs.getInt("level");
+			int hitpoints = myRs.getInt("hitpoints");
+			int maxHitpoints = myRs.getInt("max_hitpoints");
 			
 			int playerPetId = myRs.getInt("player_pet_id");
 			if (playerPetId != 0) {
 				PlayerPet playerPet = petDbUtil.getPlayerPetFromId(playerPetId, accountDbUtil);
 				battlePet = new BattlePet(
 						id,
-						getHitpointTotal(playerPet.getPet(), level),
-						level,
-						playerPet);
+						hitpoints,
+						maxHitpoints,
+						level, playerPet);
 			}
 			else {				
 				Pet pet = petDbUtil.getPetFromId(myRs.getInt("pet_id"));
 				battlePet = new BattlePet(
 						id,
-						getHitpointTotal(pet, level),
-						level,
-						pet);
+						hitpoints,
+						maxHitpoints,
+						level, pet);
 			}
 				
 			return battlePet;

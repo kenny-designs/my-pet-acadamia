@@ -178,6 +178,7 @@ UNLOCK TABLES;
 CREATE TABLE battle_pets(
 	id INT AUTO_INCREMENT PRIMARY KEY,	
 	hitpoints INT NOT NULL,
+	max_hitpoints INT NOT NULL,
 	level INT NOT NULL,
 	player_pet_id INT DEFAULT NULL,
 	pet_id INT NOT NULL,
