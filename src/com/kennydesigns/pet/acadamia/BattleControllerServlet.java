@@ -64,14 +64,59 @@ public class BattleControllerServlet extends HttpServlet {
 			case "ENTER_SAFARI":
 				enterSafari(request, response);
 				break;
-				
+			
+			// create a new safari battle for the player
 			case "NEW_SAFARI_BATTLE":
 				newSafariBattle(request, response);
+				break;			
+			
+			// load an existing safari battle
+			case "LOAD_SAFARI_BATTLE":
+				loadSafariBattle(request, response);
 				break;			
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Load an existing safari battle instance for the player.
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
+	private void loadSafariBattle(HttpServletRequest request, HttpServletResponse response)
+		throws Exception {
+		// get the currently logged in account
+		HttpSession session = request.getSession();
+		Account theAccount = (Account)session.getAttribute("LOGGED_USER");
+			
+		// get the id for the safari battle instance
+		int safariBattleInstanceId = battleDbUtil.getSafariBattleInstanceId(theAccount);
+		
+		// if the player is not in a battle, create one
+		if (safariBattleInstanceId == -1) {
+			newSafariBattle(request, response);
+			return;
+		}
+		
+		int playerTeamId = battleDbUtil.getPlayerTeamId(safariBattleInstanceId);
+		
+		// get everything related to the player
+		Team playerTeam = battleDbUtil.getTeamFromId(playerTeamId);
+			
+		int safariTeamId = battleDbUtil.getSafariTeamId(safariBattleInstanceId);
+		
+		// get everything related to the safari pet
+		Team safariTeam = null;
+		
+		// display team information to the player
+		
+		// display safari battle page
+		RequestDispatcher dispatcher = request.getRequestDispatcher("./safari-battle.jsp");
+		dispatcher.forward(request, response);
 	}
 
 	/**
@@ -86,6 +131,15 @@ public class BattleControllerServlet extends HttpServlet {
 		// get the currently logged in account
 		HttpSession session = request.getSession();
 		Account theAccount = (Account)session.getAttribute("LOGGED_USER");
+			
+		// check if the user is currently in a battle
+		int safariBattleInstanceId = battleDbUtil.getSafariBattleInstanceId(theAccount);
+		
+		// if the player is currently in a battle, load it instead
+		if (safariBattleInstanceId != -1) {
+			loadSafariBattle(request, response);
+			return;
+		}
 
 		// get the logged in account's team
 		List<PlayerPet> playerPets = petDbUtil.getAccountsTeam(theAccount);
@@ -133,7 +187,7 @@ public class BattleControllerServlet extends HttpServlet {
 		Account theAccount = (Account)session.getAttribute("LOGGED_USER");
 	
 		// check if the user is currently in a battle
-		boolean isInSafari = battleDbUtil.isAccountInSafari(theAccount);
+		boolean isInSafari = battleDbUtil.getSafariBattleInstanceId(theAccount) != -1;
 		request.setAttribute("HAS_SAFARI_BATTLE", isInSafari);
 
 		// display safari page

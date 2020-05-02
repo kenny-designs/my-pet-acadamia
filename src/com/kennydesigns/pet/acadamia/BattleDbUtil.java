@@ -38,9 +38,9 @@ public class BattleDbUtil {
 	 * Checks if the given account currently has an ongoing safari battle.
 	 * 
 	 * @param theAccount
-	 * @return True is the account is in a battle. False otherwise.
+	 * @return The safari_battle_instance id associated with the account. -1 if not found.
 	 */
-	public boolean isAccountInSafari(Account theAccount)
+	public int getSafariBattleInstanceId(Account theAccount)
 		throws Exception {
 		Connection        myConn = null;
 		PreparedStatement myStmt = null;
@@ -63,16 +63,22 @@ public class BattleDbUtil {
 					"WHERE player_pets.account_id = ?";
 			
 			// create prepared statement
-			myStmt = myConn.prepareStatement(sql);
+			myStmt = myConn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			
 			// set parameters
 			myStmt.setInt(1, theAccount.getId());
 			
 			// execute statement
 			myRs = myStmt.executeQuery();
-
-			// if true, then the account has a safari battle tied to it
-			return myRs.next();
+					
+			// get the id of the inserted battle pet
+			myRs = myStmt.getGeneratedKeys();
+			
+			// if nothing is found, return -1
+			if (!myRs.next()) return -1;	
+		
+			// success! return id of the safari_battle_instance
+			return myRs.getInt(1);	
 		}
 		finally {
 			// Cleanup JDBC objects
@@ -118,7 +124,7 @@ public class BattleDbUtil {
 			// get the id of the inserted battle pet
 			myRs = myStmt.getGeneratedKeys();
 			
-			// if failed, return null
+			// if failed, throw exception
 			if (!myRs.next()) {
 				throw new Exception("Failed to create new battle pet!");
 			};
@@ -410,5 +416,140 @@ public class BattleDbUtil {
 			// clean up JDBC objects
 			close(myConn, myStmt, null);
 		}		
+	}
+
+	/**
+	 * Gets the id of the team associated with the player for the given
+	 * safari battle instance id.
+	 * 
+	 * @param safariBattleInstanceId
+	 * @return The id of the team associated with the player.
+	 * @throws Exception
+	 */
+	public int getPlayerTeamId(int safariBattleInstanceId) 
+		throws Exception {
+		Connection        myConn = null;
+		PreparedStatement myStmt = null;
+		ResultSet         myRs   = null;
+		
+		try {
+			// get connection to database
+			myConn = dataSource.getConnection();
+			
+			// create sql to get a random safari pet of the given level
+			String sql = "SELECT player_team_id FROM safari_battle_instances " +
+						 "WHERE id=? ";
+			
+			// create prepared statement
+			myStmt = myConn.prepareStatement(sql);
+			
+			// set parameters
+			myStmt.setInt(1, safariBattleInstanceId);
+			
+			// execute statement
+			myRs = myStmt.executeQuery();
+				
+			// if no safar_battle_instance found, throw exception
+			if (!myRs.next()) {
+				throw new Exception(
+						"No safari_battle_instance exists with id " + safariBattleInstanceId);
+			}
+			
+			// return id of the player team
+			return myRs.getInt("player_team_id");		
+		}
+		finally {
+			// Cleanup JDBC objects
+			close(myConn, myStmt, myRs);
+		}	
+	}
+
+	/**
+	 * Gets the id of the team associated with the safari pets for the given
+	 * safari battle instance id.
+	 * 
+	 * @param safariBattleInstanceId
+	 * @return The id of the team associated with the safari pets.
+	 * @throws Exception
+	 */
+	public int getSafariTeamId(int safariBattleInstanceId)
+		throws Exception {
+		Connection        myConn = null;
+		PreparedStatement myStmt = null;
+		ResultSet         myRs   = null;
+		
+		try {
+			// get connection to database
+			myConn = dataSource.getConnection();
+			
+			// create sql to get a random safari pet of the given level
+			String sql = "SELECT safari_team_id FROM safari_battle_instances " +
+						 "WHERE id=? ";
+			
+			// create prepared statement
+			myStmt = myConn.prepareStatement(sql);
+			
+			// set parameters
+			myStmt.setInt(1, safariBattleInstanceId);
+			
+			// execute statement
+			myRs = myStmt.executeQuery();
+				
+			// if no safar_battle_instance found, throw exception
+			if (!myRs.next()) {
+				throw new Exception(
+						"No safari_battle_instance exists with id " + safariBattleInstanceId);
+			}
+			
+			// return id of the player team
+			return myRs.getInt("safari_team_id");		
+		}
+		finally {
+			// Cleanup JDBC objects
+			close(myConn, myStmt, myRs);
+		}	
+	}
+
+	/**
+	 * Creates a team object based on the given team id.
+	 * 
+	 * @param teamId
+	 * @return The team from the given id.
+	 */
+	public Team getTeamFromId(int teamId) throws Exception {		
+		Connection        myConn = null;
+		PreparedStatement myStmt = null;
+		ResultSet         myRs   = null;
+		
+		try {
+			// get connection to database
+			myConn = dataSource.getConnection();
+			
+			// create sql to get team instance based on given id
+			String sql = "SELECT * FROM team_instances " +
+						 "WHERE id=?";
+			
+			// create prepared statement
+			myStmt = myConn.prepareStatement(sql);
+			
+			// set parameters
+			myStmt.setInt(1, teamId);
+			
+			// execute statement
+			myRs = myStmt.executeQuery();
+	
+			// if no team found, throw exception
+			if (!myRs.next()) {
+				throw new Exception(
+						"Cannot randomly find team with id " + teamId + "!");
+			}
+		
+			// TODO: return an actual team!
+			return null;
+		}
+		finally {
+			// Cleanup JDBC objects
+			close(myConn, myStmt, myRs);
+		}	
 	}
 }
