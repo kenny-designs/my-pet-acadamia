@@ -222,6 +222,13 @@ public class PetDbUtil extends DbUtil {
 		}
 	}
 
+	/**
+	 * Updates the team status of a player pet in the database.
+	 * 
+	 * @param playerPetId
+	 * @param bTeam
+	 * @throws Exception
+	 */
 	public void setPlayerPetTeam(int playerPetId, boolean bTeam) throws Exception {
 		Connection myConn = null;
 		PreparedStatement myStmt = null;
@@ -308,6 +315,7 @@ public class PetDbUtil extends DbUtil {
 				throw new Exception("Could not find pet with id: " + id);
 			}
 
+			// create list of skills available to the pet
 			List<String> skills = new ArrayList<>();
 			for (int i = 1; i <= 4; i++) {
 				String skillName = myRs.getString("skill_" + i + "_name");
@@ -315,6 +323,7 @@ public class PetDbUtil extends DbUtil {
 				skills.add(skillName);
 			}
 
+			// create the pet
 			Pet thePet = new Pet(myRs.getInt("id"),
 					myRs.getString("name"),
 					myRs.getString("health_type"),

@@ -53,11 +53,17 @@
 				  max="${playerBattlePet.maxHitpoints}">
 		</progress>
 		<hr />
-		<form action="BattleControllerServlet" method="POST">
-			<input type="hidden" name="command" value="SKILL_SAFARI_BATTLE" />
-			<input type="hidden" name="skill" value="SKILL_ID" />
-			<input type="submit" value="Attack" />
-		</form>
+		
+		<!-- Display available skills -->	
+		<c:forEach var="skillName" items="${playerBattlePet.pet.skills}">
+			<form action="BattleControllerServlet" method="POST">
+				<input type="hidden" name="command" value="SKILL_SAFARI_BATTLE" />
+				<input type="hidden" name="skill-name" value="${skillName}" />
+				<input type="hidden" name="player-battle-pet-id" value="${playerBattlePet.id}" />
+				<input type="hidden" name="safari-battle-pet-id" value="${safariBattlePet.id}" />
+				<input type="submit" value="${skillName}" />
+			</form>
+		</c:forEach>
 	  </div>
 	</div>
 	
@@ -86,7 +92,6 @@
 	<div class="card">
 		<div style="display: flex; justify-content: space-evenly;">
 			<img src="./images/${safariInactivePet.pet.imageURL}" alt="PetImage">	
-			<button>Swap</button>
 		</div>
 	  <div class="container" style="margin-top: 5px;">
 		<h4 style="margin-bottom: 0; text-align: center;">

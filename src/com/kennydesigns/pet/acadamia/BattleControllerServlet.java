@@ -85,14 +85,61 @@ public class BattleControllerServlet extends HttpServlet {
 	}
 
 	/**
-	 * Resolve ability the player chose to use.
+	 * Resolve ability the player chose to use and have the enemy retaliate.
 	 * 
 	 * @param request
 	 * @param response
 	 */
 	private void useSkillSafariBattle(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		// get battle pet id
+		int playerBattlePetId = Integer.parseInt(request.getParameter("player-battle-pet-id"));
+		int safariBattlePetId = Integer.parseInt(request.getParameter("safari-battle-pet-id"));	
+		
+		// create battle pet objects from id
+		BattlePet playerBattlePet = battleDbUtil.getBattlePetFromId(playerBattlePetId, petDbUtil, accountDbUtil);
+		BattlePet safariBattlePet = battleDbUtil.getBattlePetFromId(safariBattlePetId, petDbUtil, accountDbUtil);
+		
+		// get skill names
+		String playerSkillName = request.getParameter("skill-name");
+		String safariSkillName = safariBattlePet.getPet().getRandomSkill();
+		
+		// process player skill
+		Skill playerSkill = battleDbUtil.getSkillFromName(playerSkillName, playerBattlePet.getLevel());
+		processSkill(playerBattlePet, safariBattlePet, playerSkill);
+		
+		// process safari skill
+		Skill safariSkill = battleDbUtil.getSkillFromName(safariSkillName, safariBattlePet.getLevel());
+		processSkill(safariBattlePet, playerBattlePet, safariSkill);
+			
+		// reload the battle with the new changes in place
+		loadSafariBattle(request, response);
+	}
+
+	/**
+	 * Processes the given skill and applies any relevant information (such
+	 * as decreasing hitpoints, status effects, etc).
+	 * 
+	 * @param srcBattlePet
+	 * @param destBattlePet
+	 * @param skill
+	 */
+	private void processSkill(BattlePet srcBattlePet, BattlePet destBattlePet, Skill skill)
 		throws Exception {
-		// TODO: use a skill
+		// Process damage
+		Skill.Damage damage = skill.getDamage();
+		if (damage != null) {
+			int newHealth = destBattlePet.getHitpoints() - damage.getDamage();
+			battleDbUtil.updateHitpoints(destBattlePet, newHealth);
+		}
+		
+		// Process debuffs
+		Skill.Debuff debuff = skill.getDebuff();
+		if (debuff != null) {}
+		
+		// Process buffs
+		Skill.Buff buff = skill.getBuff();
+		if (buff != null) {}
 	}
 
 	/**
@@ -167,7 +214,8 @@ public class BattleControllerServlet extends HttpServlet {
 			playerBattlePets.add(battleDbUtil.createBattlePet(pp));
 			avgLevel += pp.getLevel();
 		}
-		
+	
+		// get average level of the team
 		avgLevel /= playerBattlePets.size();
 		
 		// add player's battle pets to team instance

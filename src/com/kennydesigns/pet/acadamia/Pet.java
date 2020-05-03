@@ -4,6 +4,7 @@
 package com.kennydesigns.pet.acadamia;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * @author crowly
@@ -108,5 +109,16 @@ public class Pet {
 	 */
 	public void setSkills(List<String> skills) {
 		this.skills = skills;
-	}	
+	}
+
+	/**
+	 * Returns a random skill. Great for safari pets and abilities that
+	 * may disorient the pet.
+	 * 
+	 * @return A random skill.
+	 */
+	public String getRandomSkill() {
+		Random rand = new Random();
+		return skills.get(rand.nextInt(skills.size()));
+	}
 }

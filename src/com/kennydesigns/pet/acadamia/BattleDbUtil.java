@@ -12,6 +12,8 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import com.kennydesigns.pet.acadamia.Skill.Damage;
+
 /**
  * @author crowly
  * Handles battle database related work.
@@ -532,7 +534,6 @@ public class BattleDbUtil extends DbUtil {
 				throw new Exception("Cannot find team with id " + teamId + "!");
 			}	
 			
-			// TODO: finish this!
 			List<BattlePet> battlePets = new ArrayList<>();
 			for (int i = 1; i <= 3; i++) {
 				int battlePetId = myRs.getInt("battle_pet_" + i + "_id");
@@ -562,7 +563,7 @@ public class BattleDbUtil extends DbUtil {
 	 * @param accountDbUtil 
 	 * @return Battle pet from the given id.
 	 */
-	private BattlePet getBattlePetFromId(int id, PetDbUtil petDbUtil, AccountDbUtil accountDbUtil)
+	public BattlePet getBattlePetFromId(int id, PetDbUtil petDbUtil, AccountDbUtil accountDbUtil)
 			throws Exception {
 		Connection        myConn = null;
 		PreparedStatement myStmt = null;
@@ -619,5 +620,160 @@ public class BattleDbUtil extends DbUtil {
 			// Cleanup JDBC objects
 			close(myConn, myStmt, myRs);
 		}	
+	}
+
+	/**
+	 * Returns a skill object based on the given name and provided level
+	 * 
+	 * @param skillName
+	 * @param level
+	 * @return The skill.
+	 * @throws Exception
+	 */
+	public Skill getSkillFromName(String skillName, int level)
+			throws Exception {
+		Connection        myConn = null;
+		PreparedStatement myStmt = null;
+		ResultSet         myRs   = null;
+		
+		try {
+			// get connection to database
+			myConn = dataSource.getConnection();
+			
+			// create sql to get team instance based on given id
+			String sql = "SELECT * FROM skills " +
+						 "WHERE name=?";
+			
+			// create prepared statement
+			myStmt = myConn.prepareStatement(sql);
+			
+			// set parameters
+			myStmt.setString(1, skillName);
+			
+			// execute statement
+			myRs = myStmt.executeQuery();
+	
+			// if no skill found, throw exception
+			if (!myRs.next()) {
+				throw new Exception("Cannot find skill with name " + skillName + "!");
+			}
+
+			// get the damage part of the skill
+			Skill.Damage damage = null;
+			String damageType = myRs.getString("damage_type");
+			if (damageType != null) {
+				damage = getSkillDamage(damageType, level);
+			}
+			
+			// get the debuff part of the skill
+			Skill.Debuff debuff = null;
+			String debuffType = myRs.getString("debuff_type");
+			if (debuffType != null) {}
+			
+			// get the buff part of the skill
+			Skill.Buff buff = null;
+			String buffType = myRs.getString("buff_type");
+			if (buffType != null) {}
+		
+			// put together the skill and return it
+			return new Skill(skillName, damage, debuff, buff);
+		}
+		finally {
+			// Cleanup JDBC objects
+			close(myConn, myStmt, myRs);
+		}	
+	}
+
+	/**
+	 * Creates a new damage object based on the given
+	 * damage type and level.
+	 * 
+	 * @param damageType
+	 * @param level
+	 * @return
+	 */
+	private Damage getSkillDamage(String damageType, int level)
+		throws Exception {
+		Connection        myConn = null;
+		PreparedStatement myStmt = null;
+		ResultSet         myRs   = null;
+		
+		try {
+			// get connection to database
+			myConn = dataSource.getConnection();
+			
+			// create sql to get the battle pet
+			String sql = "SELECT * FROM damages " +
+						 "WHERE damage_type=? AND level=?";
+			
+			// create prepared statement
+			myStmt = myConn.prepareStatement(sql);
+			
+			// set parameters
+			myStmt.setString(1, damageType);
+			myStmt.setInt(2, level);
+			
+			// execute statement
+			myRs = myStmt.executeQuery();
+	
+			// if no damage found, throw exception
+			if (!myRs.next()) {
+				throw new Exception("Cannot find damage skill of type " + damageType + 
+									" that is level " + level + "!");
+			}
+		
+			// return the final damage
+			return new Skill.Damage(damageType, level, 
+									myRs.getInt("low_damage"),
+									myRs.getInt("high_damage"));
+		}
+		finally {
+			// Cleanup JDBC objects
+			close(myConn, myStmt, myRs);
+		}	
+	}
+
+	/**
+	 * Updates the battle pets hitpoints to a new value.
+	 * 
+	 * @param battlePet
+	 * @param newHealth
+	 */
+	public void updateHitpoints(BattlePet battlePet, int newHealth)
+		throws Exception {
+		Connection myConn = null;
+		PreparedStatement myStmt = null;
+		
+		try {
+			// make sure the new health is [0, maxHitpoints]
+			if (newHealth < 0) {
+				newHealth = 0;
+			}
+			else if (newHealth > battlePet.getMaxHitpoints()) {
+				newHealth = battlePet.getMaxHitpoints();
+			}
+			
+			// get connection to database
+			myConn = dataSource.getConnection();
+			
+			// create sql to delete the player's pet
+			String sql = "UPDATE battle_pets " +
+						 "SET hitpoints=? " +
+						 "WHERE id=?";
+						
+			// prepare statement
+			myStmt = myConn.prepareStatement(sql);
+			
+			// set params
+			myStmt.setInt(1, newHealth);
+			myStmt.setInt(2, battlePet.getId());
+			
+			// execute sql statement
+			myStmt.execute();
+		}
+		finally {
+			// clean up JDBC code
+			close(myConn, myStmt, null);
+		}
 	}
 }
