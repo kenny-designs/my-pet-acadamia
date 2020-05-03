@@ -776,4 +776,58 @@ public class BattleDbUtil extends DbUtil {
 			close(myConn, myStmt, null);
 		}
 	}
+
+	/**
+	 * Swaps the two given battle pets on the team.
+	 * 
+	 * @param firstBattlePetId
+	 * @param secondBattlePetId
+	 * @param teamId
+	 * @param petDbUtil
+	 * @param accountDbUtil
+	 */
+	public void swapBattlePetsOnTeam(int firstBattlePetId,
+									 int secondBattlePetId,
+									 int teamId,
+									 PetDbUtil petDbUtil,
+									 AccountDbUtil accountDbUtil) 
+		throws Exception {
+		Connection myConn = null;
+		PreparedStatement myStmt = null;
+		
+		try {
+			// swap the two pets on the team
+			Team team = getTeamFromId(teamId, petDbUtil, accountDbUtil);
+			team.swapPetsById(firstBattlePetId, secondBattlePetId);
+			
+			// get all pets on the team
+			List<BattlePet> battlePets = team.getBattlePets();
+			
+			// build the query
+			StringBuilder sql = new StringBuilder("UPDATE team_instances SET ");
+			for (int i = 1; i <= battlePets.size(); i++) {
+				BattlePet battlePet = battlePets.get(i-1);
+				sql.append("battle_pet_" + i + "_id=" + battlePet.getId());
+				
+				if (i != battlePets.size()) {
+					sql.append(", ");
+				}
+			}
+			
+			sql.append(" WHERE id=" + teamId);
+				
+			// get connection to database
+			myConn = dataSource.getConnection();
+						
+			// prepare statement
+			myStmt = myConn.prepareStatement(sql.toString());
+						
+			// execute sql statement
+			myStmt.execute();
+		}
+		finally {
+			// clean up JDBC code
+			close(myConn, myStmt, null);
+		}	
+	}
 }

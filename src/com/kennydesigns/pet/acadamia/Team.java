@@ -3,6 +3,7 @@
  */
 package com.kennydesigns.pet.acadamia;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -68,5 +69,35 @@ public class Team {
 	 */
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	/**
+	 * Swaps the two pets in the battlePets list by their id.
+	 * 
+	 * @param firstBattlePetId
+	 * @param secondBattlePetId
+	 */
+	public void swapPetsById(int firstBattlePetId, int secondBattlePetId)
+		throws Exception {
+		int pos1 = -1, pos2 = -1;
+		for (int i = 0; i < battlePets.size(); i++) {
+			int id = battlePets.get(i).getId();
+			
+			if (id == firstBattlePetId) {
+				pos1 = i;
+			}
+			else if (id == secondBattlePetId) {
+				pos2 = i;
+			}
+		}
+	
+		// throw exception if either battle pet id was not found
+		if (pos1 == -1 || pos2 == -1) {
+			throw new Exception("Cannot swap pets with id " + firstBattlePetId +
+								" and " + secondBattlePetId +
+								" in team  with id" + this.id);
+		}
+		
+		Collections.swap(battlePets, pos1, pos2);
 	}	
 }

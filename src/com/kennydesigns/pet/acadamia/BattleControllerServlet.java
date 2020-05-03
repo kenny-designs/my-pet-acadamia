@@ -76,12 +76,37 @@ public class BattleControllerServlet extends HttpServlet {
 				
 			// use a skill in battle
 			case "SWAP_SAFARI_BATTLE":
-				//useSkillSafariBattle(request, response);
+				swapPetsSafariBattle(request, response);
 				break;				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Swaps an active pet with an inactive one during a battle.
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
+	private void swapPetsSafariBattle(HttpServletRequest request, HttpServletResponse response)
+		throws Exception {		
+		int teamId = Integer.parseInt(request.getParameter("team-id"));
+		int firstBattlePetId = Integer.parseInt(request.getParameter("first-battle-pet-id"));
+		int secondBattlePetId = Integer.parseInt(request.getParameter("second-battle-pet-id"));
+	
+		// swap both battle pets on the team
+		battleDbUtil.swapBattlePetsOnTeam(
+				firstBattlePetId,
+				secondBattlePetId,
+				teamId,
+				petDbUtil,
+				accountDbUtil);
+		
+		// reload the battle with the new changes in place
+		loadSafariBattle(request, response);
 	}
 
 	/**

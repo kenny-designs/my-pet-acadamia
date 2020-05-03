@@ -26,6 +26,10 @@
 			<img src="./images/${playerInactivePet.pet.imageURL}" alt="PetImage">
 			<form action="BattleControllerServlet" method="POST">
 				<input type="hidden" name="command" value="SWAP_SAFARI_BATTLE" />
+				<input type="hidden" name="team-id" value="${PLAYER_TEAM.id}" />
+				<input type="hidden" name="first-battle-pet-id" value="${playerInactivePet.id}" />
+				<input type="hidden" name="second-battle-pet-id" value="${playerBattlePet.id}" />
+				<input type="hidden" name="safari-battle-pet-id" value="${safariBattlePet.id}" />
 				<input type="submit" value="Swap" />
 			</form>
 		</div>
