@@ -9,7 +9,7 @@
 <title>My Pet Acadamia: All Pets</title>
 <link type="text/css" rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="wiki-bg">
 
 <h1>Gotta Adopt them All!</h1>
 

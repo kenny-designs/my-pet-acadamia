@@ -25,12 +25,21 @@ public class Team {
 	}
 
 	/**
-	 * returns the currently active battle pet
+	 * Returns the currently active battle pet
 	 * 
 	 * @return The active battle pet.
 	 */
 	public BattlePet getActiveBattlePet() {
 		return battlePets.get(0);
+	}
+
+	/**
+	 * Returns a list of inactive battle pets. Empty if there are none.
+	 * 
+	 * @return List of inactive battle pets. Empty list if there are none.
+	 */
+	public List<BattlePet> getInactiveBattlePets() {	
+		return battlePets.subList(1, battlePets.size());
 	}
 
 	/**
