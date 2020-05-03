@@ -23,8 +23,11 @@
 	<c:forEach var="playerInactivePet" items="${PLAYER_TEAM.getInactiveBattlePets()}">
 	<div class="card">
 		<div style="display: flex; justify-content: space-evenly;">
-			<img src="./images/${playerInactivePet.pet.imageURL}" alt="PetImage">	
-			<button>Swap</button>
+			<img src="./images/${playerInactivePet.pet.imageURL}" alt="PetImage">
+			<form action="BattleControllerServlet" method="POST">
+				<input type="hidden" name="command" value="SWAP_SAFARI_BATTLE" />
+				<input type="submit" value="Swap" />
+			</form>
 		</div>
 	  <div class="container" style="margin-top: 5px;">
 		<h4 style="margin-bottom: 0; text-align: center;">
@@ -50,6 +53,11 @@
 				  max="${playerBattlePet.maxHitpoints}">
 		</progress>
 		<hr />
+		<form action="BattleControllerServlet" method="POST">
+			<input type="hidden" name="command" value="SKILL_SAFARI_BATTLE" />
+			<input type="hidden" name="skill" value="SKILL_ID" />
+			<input type="submit" value="Attack" />
+		</form>
 	  </div>
 	</div>
 	

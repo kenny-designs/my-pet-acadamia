@@ -11,6 +11,22 @@
 	background-image: url("../images/pet-bg.jpg");
 }
 
+.card input[type=submit] {
+	background-color: #ad7fa8;
+	border: none;
+	color: white;
+	padding: 7px 14px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	border-radius: 5px;
+}
+
+.card input[type=submit]:hover {
+	opacity: 0.8;
+}
+
 .card hr {
 	height: 1px;
 	background-color: black;

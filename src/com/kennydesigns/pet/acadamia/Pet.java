@@ -3,34 +3,38 @@
  */
 package com.kennydesigns.pet.acadamia;
 
+import java.util.List;
+
 /**
  * @author crowly
  * Holds basic information about each collectable pet.
  */
 public class Pet {
-	// TODO: add skills
 	private int id;
 	private String name;
 	private String healthType;
 	private String imageURL;
-	private String description;	
-	
+	private String description;
+	private List<String> skills;
+			
 	/**
 	 * @param id
 	 * @param name
 	 * @param healthType
 	 * @param imageURL
 	 * @param description
+	 * @param skills
 	 */
-	public Pet(int id, String name, String healthType, String imageURL, String description) {
+	public Pet(int id, String name, String healthType, String imageURL, String description, List<String> skills) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.healthType = healthType;
 		this.imageURL = imageURL;
 		this.description = description;
+		this.skills = skills;
 	}
-	
+
 	/**
 	 * @return the id
 	 */
@@ -90,5 +94,19 @@ public class Pet {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	/**
+	 * @return the skills
+	 */
+	public List<String> getSkills() {
+		return skills;
+	}
+
+	/**
+	 * @param skills the skills to set
+	 */
+	public void setSkills(List<String> skills) {
+		this.skills = skills;
 	}	
 }

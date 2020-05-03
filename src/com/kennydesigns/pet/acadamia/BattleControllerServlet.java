@@ -67,11 +67,32 @@ public class BattleControllerServlet extends HttpServlet {
 			// load an existing safari battle
 			case "LOAD_SAFARI_BATTLE":
 				loadSafariBattle(request, response);
+				break;
+				
+			// use a skill in battle
+			case "SKILL_SAFARI_BATTLE":
+				useSkillSafariBattle(request, response);
 				break;			
+				
+			// use a skill in battle
+			case "SWAP_SAFARI_BATTLE":
+				//useSkillSafariBattle(request, response);
+				break;				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Resolve ability the player chose to use.
+	 * 
+	 * @param request
+	 * @param response
+	 */
+	private void useSkillSafariBattle(HttpServletRequest request, HttpServletResponse response)
+		throws Exception {
+		// TODO: use a skill
 	}
 
 	/**

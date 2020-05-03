@@ -41,14 +41,8 @@ public class PetDbUtil extends DbUtil {
 			myStmt = myConn.createStatement();	
 			myRs = myStmt.executeQuery(sql);
 		
-			while (myRs.next()) {				
-				Pet tempPet = new Pet(myRs.getInt("id"),
-									  myRs.getString("name"),
-									  myRs.getString("health_type"),
-									  myRs.getString("image"),
-									  myRs.getString("description"));
-				
-				pets.add(tempPet);
+			while (myRs.next()) {
+				pets.add(getPetFromId(myRs.getInt("id")));
 			}
 			
 			return pets;
@@ -86,17 +80,13 @@ public class PetDbUtil extends DbUtil {
 			// execute statement
 			myRs = myStmt.executeQuery();
 	
-			// if no pet found, return null
-			if (!myRs.next()) return null;
+			// if no pet found, throw exception
+			if (!myRs.next()) {
+				throw new Exception("No pet found with name " + petName);
+			};
 		
-			// pet found, return it	
-			Pet thePet = new Pet(myRs.getInt("id"),
-								 myRs.getString("name"),
-								 myRs.getString("health_type"),
-								 myRs.getString("image"),
-								 myRs.getString("description"));
-			
-			return thePet;
+			// pet found, return it		
+			return getPetFromId(myRs.getInt("id"));
 		}
 		finally {
 			// Cleanup JDBC objects
@@ -317,14 +307,21 @@ public class PetDbUtil extends DbUtil {
 			if (!myRs.next()) {
 				throw new Exception("Could not find pet with id: " + id);
 			}
-		
-			// pet found, return it	
+
+			List<String> skills = new ArrayList<>();
+			for (int i = 1; i <= 4; i++) {
+				String skillName = myRs.getString("skill_" + i + "_name");
+				if (skillName == null) break;
+				skills.add(skillName);
+			}
+
 			Pet thePet = new Pet(myRs.getInt("id"),
-								 myRs.getString("name"),
-								 myRs.getString("health_type"),
-								 myRs.getString("image"),
-								 myRs.getString("description"));
-			
+					myRs.getString("name"),
+					myRs.getString("health_type"),
+					myRs.getString("image"),
+					myRs.getString("description"),
+					skills);
+
 			return thePet;
 		}
 		finally {
@@ -341,32 +338,32 @@ public class PetDbUtil extends DbUtil {
 	 * @return PlayerPet from the id.
 	 */
 	public PlayerPet getPlayerPetFromId(int id, AccountDbUtil accountDbUtil)
-		throws Exception {
+			throws Exception {
 		Connection        myConn = null;
 		PreparedStatement myStmt = null;
 		ResultSet         myRs   = null;
-		
+
 		try {			
 			// get connection to database
 			myConn = dataSource.getConnection();
-			
+
 			// create sql to get the pet based on id
 			String sql = "SELECT * FROM player_pets WHERE id=?";
-			
+
 			// create prepared statement
 			myStmt = myConn.prepareStatement(sql);
-			
+
 			// set parameters
 			myStmt.setInt(1, id);
-			
+
 			// execute statement
 			myRs = myStmt.executeQuery();
-	
+
 			// if no pet found, throw an exception
 			if (!myRs.next()) {
 				throw new Exception("Could not find player pet with id: " + id);
 			}
-		
+
 			// player pet found, return it				
 			PlayerPet playerPet = new PlayerPet(
 					myRs.getInt("id"),
@@ -375,7 +372,7 @@ public class PetDbUtil extends DbUtil {
 					myRs.getBoolean("is_team"),
 					getPetFromId(myRs.getInt("pet_id")),
 					accountDbUtil.getAccountFromId(myRs.getInt("account_id")));
-			
+
 			return playerPet;
 		}
 		finally {
