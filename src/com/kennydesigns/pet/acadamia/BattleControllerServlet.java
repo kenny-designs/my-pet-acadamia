@@ -94,17 +94,29 @@ public class BattleControllerServlet extends HttpServlet {
 	private void swapPetsSafariBattle(HttpServletRequest request, HttpServletResponse response)
 		throws Exception {		
 		int teamId = Integer.parseInt(request.getParameter("team-id"));
-		int firstBattlePetId = Integer.parseInt(request.getParameter("first-battle-pet-id"));
-		int secondBattlePetId = Integer.parseInt(request.getParameter("second-battle-pet-id"));
+		int inactiveBattlePetId = Integer.parseInt(request.getParameter("inactive-battle-pet-id"));
+		int activeBattlePetId = Integer.parseInt(request.getParameter("active-battle-pet-id"));
+		int safariBattlePetId = Integer.parseInt(request.getParameter("safari-battle-pet-id"));	
 	
 		// swap both battle pets on the team
 		battleDbUtil.swapBattlePetsOnTeam(
-				firstBattlePetId,
-				secondBattlePetId,
+				inactiveBattlePetId,
+				activeBattlePetId,
 				teamId,
 				petDbUtil,
 				accountDbUtil);
 		
+		// create battle pets
+		BattlePet safariBattlePet = battleDbUtil.getBattlePetFromId(safariBattlePetId, petDbUtil, accountDbUtil);
+		BattlePet playerBattlePet = battleDbUtil.getBattlePetFromId(inactiveBattlePetId, petDbUtil, accountDbUtil);
+		
+		// get the skill the safari pet is going to use
+		String safariSkillName = safariBattlePet.getPet().getRandomSkill();
+		Skill safariSkill = battleDbUtil.getSkillFromName(safariSkillName, safariBattlePet.getLevel());
+		
+		// have safari pet attack the player's new active pet
+		processSkill(safariBattlePet, playerBattlePet, safariSkill);
+	
 		// reload the battle with the new changes in place
 		loadSafariBattle(request, response);
 	}
