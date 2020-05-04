@@ -28,8 +28,6 @@
 	<input type="submit" value="Enter Safari" />
 </form>
 
-<a href="./battledome.jsp">Battledome</a>
-
 <form action="PetsControllerServlet" method="GET">
 	<input type="hidden" name="command" value="DISPLAY_ALL_PETS" />
 	<input type="submit" value="View PetWiki" />

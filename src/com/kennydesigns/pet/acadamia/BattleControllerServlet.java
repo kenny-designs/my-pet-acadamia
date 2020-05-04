@@ -212,9 +212,20 @@ public class BattleControllerServlet extends HttpServlet {
 		// set attribute for both the player and safari team
 		request.setAttribute("PLAYER_TEAM", playerTeam);
 		request.setAttribute("SAFARI_TEAM", safariTeam);
-		
-		// display safari battle page
+	
+		// return to the battle by default
 		RequestDispatcher dispatcher = request.getRequestDispatcher("./safari-battle.jsp");
+		
+		// if safari team is dead, winner!
+		if (safariTeam.isTeamDead()) {
+			dispatcher = request.getRequestDispatcher("./safari-win.jsp");
+		}
+		// if player team is dead, loser!		
+		else if (playerTeam.isTeamDead()) {
+			dispatcher = request.getRequestDispatcher("./safari-lost.jsp");
+		}
+		
+		// go to the correct page
 		dispatcher.forward(request, response);
 	}
 

@@ -99,5 +99,16 @@ public class Team {
 		}
 		
 		Collections.swap(battlePets, pos1, pos2);
-	}	
+	}
+
+	/**
+	 * Returns true if the entire team has 0 hp. False otherwise.
+	 * @return True if everyone is dead. False if not.
+	 */
+	public boolean isTeamDead() {
+		for (BattlePet bp : battlePets) {
+			if (bp.getHitpoints() > 0) return false;
+		}
+		return true;
+	}
 }
