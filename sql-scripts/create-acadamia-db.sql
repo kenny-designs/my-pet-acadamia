@@ -24,7 +24,10 @@ CREATE TABLE accounts(
 	username VARCHAR(32) NOT NULL UNIQUE,
 	password VARCHAR(32) NOT NULL,
 	battles_won INT DEFAULT 0,
-	battles_lost INT DEFAULT 0
+	battles_lost INT DEFAULT 0,
+	safari_battles_won INT DEFAULT 0,
+	safari_battles_lost INT DEFAULT 0
+
 );
 
 -- Dummy data for accounts table

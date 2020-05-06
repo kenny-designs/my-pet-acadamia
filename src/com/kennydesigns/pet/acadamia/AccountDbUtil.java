@@ -58,7 +58,9 @@ public class AccountDbUtil extends DbUtil {
 											 myRs.getString("password"),
 											 myRs.getInt("id"),
 											 myRs.getInt("battles_won"),
-											 myRs.getInt("battles_lost"));			
+											 myRs.getInt("battles_lost"),
+											 myRs.getInt("safari_battles_won"),
+											 myRs.getInt("safari_battles_lost"));			
 			
 			return theAccount;
 		}
@@ -148,7 +150,9 @@ public class AccountDbUtil extends DbUtil {
 											 null,
 											 -1,
 											 myRs.getInt("battles_won"),
-											 myRs.getInt("battles_lost"));			
+											 myRs.getInt("battles_lost"),
+											 myRs.getInt("safari_battles_won"),
+											 myRs.getInt("safari_battles_lost"));			
 			
 			return theAccount;
 		}
@@ -195,13 +199,55 @@ public class AccountDbUtil extends DbUtil {
 											 null,
 											 id,
 											 myRs.getInt("battles_won"),
-											 myRs.getInt("battles_lost"));			
+											 myRs.getInt("battles_lost"),
+											 myRs.getInt("safari_battles_won"),
+											 myRs.getInt("safari_battles_lost"));			
 			
 			return theAccount;
 		}
 		finally {
 			// Cleanup JDBC objects
 			close(myConn, myStmt, myRs);
+		}
+	}
+
+	/**
+	 * The account to update.
+	 * 
+	 * @param theAccount
+	 */
+	public void updateAccountStats(Account theAccount) throws Exception {
+		Connection myConn = null;
+		PreparedStatement myStmt = null;
+		
+		try {			
+			// get connection to database
+			myConn = dataSource.getConnection();
+			
+			// create sql to delete the player's pet
+			String sql = "UPDATE accounts " +
+						 "SET battles_won=?, " +
+						 "    battles_lost=?, " +
+						 "    safari_battles_won=?, " +
+						 "    safari_battles_lost=? " +
+						 "WHERE id=?";
+						
+			// prepare statement
+			myStmt = myConn.prepareStatement(sql);
+			
+			// set params
+			myStmt.setInt(1, theAccount.getBattlesWon());
+			myStmt.setInt(2, theAccount.getBattlesLost());
+			myStmt.setInt(3, theAccount.getSafariBattlesWon());
+			myStmt.setInt(4, theAccount.getSafariBattlesLost());
+			myStmt.setInt(5, theAccount.getId());
+			
+			// execute sql statement
+			myStmt.execute();
+		}
+		finally {
+			// clean up JDBC code
+			close(myConn, myStmt, null);
 		}
 	}
 }
