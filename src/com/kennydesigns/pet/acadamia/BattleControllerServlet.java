@@ -219,10 +219,15 @@ public class BattleControllerServlet extends HttpServlet {
 		// if safari team is dead, winner!
 		if (safariTeam.isTeamDead()) {
 			dispatcher = request.getRequestDispatcher("./safari-win.jsp");
+			// award XP
+			// erase battle
+			battleDbUtil.endSafariBattle(safariBattleInstanceId, playerTeam, safariTeam);
 		}
 		// if player team is dead, loser!		
 		else if (playerTeam.isTeamDead()) {
 			dispatcher = request.getRequestDispatcher("./safari-lost.jsp");
+			// erase battle
+			battleDbUtil.endSafariBattle(safariBattleInstanceId, playerTeam, safariTeam);
 		}
 		
 		// go to the correct page

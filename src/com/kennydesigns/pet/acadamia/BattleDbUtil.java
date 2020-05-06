@@ -830,4 +830,32 @@ public class BattleDbUtil extends DbUtil {
 			close(myConn, myStmt, null);
 		}	
 	}
+
+	/**
+	 * Removes the safari battle and all related information
+	 * from the database.
+	 * 
+	 * @param safariBattleInstanceId
+	 * @param playerTeam
+	 * @param safariTeam
+	 */
+	public void endSafariBattle(int safariBattleInstanceId, Team playerTeam, Team safariTeam) 
+		throws Exception {
+		// delete the safari battle instance
+		deleteRowWithId("safari_battle_instances", safariBattleInstanceId);
+		
+		// delete the teams
+		deleteRowWithId("team_instances", playerTeam.getId());
+		deleteRowWithId("team_instances", safariTeam.getId());
+	
+		// delete all player battle pets from team
+		for (BattlePet battlePet : playerTeam.getBattlePets()) {			
+			deleteRowWithId("battle_pets", battlePet.getId());
+		}
+
+		// delete all safari battle pets from team
+		for (BattlePet battlePet : safariTeam.getBattlePets()) {			
+			deleteRowWithId("battle_pets", battlePet.getId());
+		}
+	}
 }
