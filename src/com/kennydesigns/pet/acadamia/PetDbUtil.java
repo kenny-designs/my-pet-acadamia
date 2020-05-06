@@ -367,4 +367,59 @@ public class PetDbUtil extends DbUtil {
 			close(myConn, myStmt, myRs);
 		}
 	}
+
+	/**
+	 * Awards the player pet with exp.
+	 * 
+	 * @param playerPet
+	 * @param expGained
+	 */
+	public void givePlayerPetExp(PlayerPet playerPet, int expGained)
+		throws Exception {		
+		Connection myConn = null;
+		PreparedStatement myStmt = null;
+
+		try {	
+			// increment exp
+			int exp = playerPet.getExp() + expGained;
+			int level = playerPet.getLevel();
+
+			// check if level up
+			if (exp >= 1000) {
+				// check if pet is at level cap
+				if (level >= 10) {
+					level = 10;
+					exp = 1000;
+				}
+				// otherwise, level up as per normal
+				else {
+					level++;
+					exp -= 1000;
+				}
+			}
+
+			// get connection to database
+			myConn = dataSource.getConnection();
+
+			// create sql to delete the player's pet
+			String sql = "UPDATE player_pets " +
+					"SET exp=?, level=? " +
+					"WHERE id=?";
+
+			// prepare statement
+			myStmt = myConn.prepareStatement(sql);
+
+			// set params
+			myStmt.setInt(1, exp);
+			myStmt.setInt(2, level);
+			myStmt.setInt(3, playerPet.getId());
+
+			// execute sql statement
+			myStmt.execute();
+		}
+		finally {
+			// clean up JDBC code
+			close(myConn, myStmt, null);
+		}
+	}
 }

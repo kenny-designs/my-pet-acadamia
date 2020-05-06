@@ -224,6 +224,11 @@ public class BattleControllerServlet extends HttpServlet {
 			if (safariTeam.isTeamDead()) {
 				dispatcher = request.getRequestDispatcher("./safari-win.jsp");
 				theAccount.setSafariBattlesWon(theAccount.getSafariBattlesWon() + 1);
+				
+				// award exp to puts
+				for (BattlePet battlePet : playerTeam.getBattlePets()) {
+					petDbUtil.givePlayerPetExp(battlePet.getPlayerPet(), 100);
+				}
 			}
 			// player lost...
 			else {
