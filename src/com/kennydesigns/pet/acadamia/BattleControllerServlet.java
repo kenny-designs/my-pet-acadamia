@@ -227,7 +227,7 @@ public class BattleControllerServlet extends HttpServlet {
 				
 				// award exp to puts
 				for (BattlePet battlePet : playerTeam.getBattlePets()) {
-					petDbUtil.givePlayerPetExp(battlePet.getPlayerPet(), 100);
+					petDbUtil.givePlayerPetExp(battlePet.getPlayerPet(), 300);
 				}
 			}
 			// player lost...

@@ -23,7 +23,8 @@
 	<div class="card">
 	  <img src="./images/${tempPet.pet.imageURL}" alt="PetImage" style="width:100%">
 	  <div class="container">
-		<h1><b>${tempPet.pet.name}</b></h1> 
+		<h1><b>${tempPet.pet.name}</b></h1> 		
+		<h2><em>lvl. ${tempPet.level}</em></h2>
 	
 		<form action="PetsControllerServlet" method="POST">
 			<input type="hidden" name="command" value="REMOVE_PET_FROM_TEAM" />
@@ -33,9 +34,17 @@
 		</form>
 		
 		<hr />
-		<p>Health Type: ${tempPet.pet.healthType}</p> 
-		<p>Level: ${tempPet.level}</p>
-		<p>Experience Points: ${tempPet.exp}</p>
+		<p>Health Type: ${tempPet.pet.healthType.toUpperCase()}</p> 
+		<label for="pet-exp">
+			Exp: ${tempPet.exp} / 1000
+		</label>	
+		<progress id="pet-exp"
+				  class="health-bar"
+				  value="${tempPet.exp}"
+				  max="1000">
+		</progress>
+
+		
 		<hr />
 		<p><em>${tempPet.pet.description}</em></p>
 	  </div>
@@ -51,7 +60,8 @@
 	<div class="card">
 	  <img src="./images/${tempPet.pet.imageURL}" alt="PetImage" style="width:100%">
 	  <div class="container">
-		<h1><b>${tempPet.pet.name}</b></h1> 
+		<h1><b>${tempPet.pet.name}</b></h1> 		
+		<h2><em>lvl. ${tempPet.level}</em></h2>
 		
 		<form action="PetsControllerServlet" method="POST">
 			<input type="hidden" name="command" value="DELETE_PLAYER_PET" />
@@ -69,9 +79,17 @@
 		</form>			
 
 		<hr />
-		<p>Health Type: ${tempPet.pet.healthType}</p> 
-		<p>Level: ${tempPet.level}</p>
-		<p>Experience Points: ${tempPet.exp}</p>
+		<p>Health Type: ${tempPet.pet.healthType.toUpperCase()}</p> 
+			
+		<label for="pet-exp">
+			Exp: ${tempPet.exp} / 1000
+		</label>	
+		<progress id="pet-exp"
+				  class="health-bar"
+				  value="${tempPet.exp}"
+				  max="1000">
+		</progress>
+		
 		<hr />
 		<p><em>${tempPet.pet.description}</em></p>
 	  </div>
