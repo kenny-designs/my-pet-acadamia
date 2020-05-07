@@ -68,10 +68,6 @@
 	align-items: center;
 }
 
-.health-bar {
-	/*width: auto;*/
-}
-
 .battle-bg {
 	background-image: url("../images/battle-bg.png");
 	background-size: cover;

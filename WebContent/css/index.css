@@ -1,0 +1,28 @@
+@charset "UTF-8";
+
+body, html {
+	height: 100%;
+	margin: 0;
+}
+
+.index-bg {
+	background-image: url('../images/index-bg.png');
+	height: 100%;
+	background-position: center;
+	background-size: cover;
+	position: relative;
+	color: yellow;
+	font-size: 25px;
+}
+
+.middle {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	text-align: center;
+}
+
+#login-form {
+	display: inline-block;
+}
