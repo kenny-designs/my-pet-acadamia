@@ -15,22 +15,9 @@ import javax.sql.DataSource;
  * @author crowly
  * Manages accounts on the database.
  */
-public class AccountDbUtil {
-	private DataSource dataSource;
-
+public class AccountDbUtil extends DbUtil {
 	public AccountDbUtil(DataSource dataSource) {
-		this.dataSource = dataSource;
-	}
-
-	private void close(Connection myConn, PreparedStatement myStmt, ResultSet myRs) {
-		try {
-			if (myRs   != null)   myRs.close();
-			if (myStmt != null) myStmt.close();
-			if (myConn != null) myConn.close();
-		}
-		catch(Exception exc) {
-			exc.printStackTrace();
-		}
+		super(dataSource);
 	}
 
 	/**
@@ -71,7 +58,9 @@ public class AccountDbUtil {
 											 myRs.getString("password"),
 											 myRs.getInt("id"),
 											 myRs.getInt("battles_won"),
-											 myRs.getInt("battles_lost"));			
+											 myRs.getInt("battles_lost"),
+											 myRs.getInt("safari_battles_won"),
+											 myRs.getInt("safari_battles_lost"));			
 			
 			return theAccount;
 		}
@@ -161,13 +150,104 @@ public class AccountDbUtil {
 											 null,
 											 -1,
 											 myRs.getInt("battles_won"),
-											 myRs.getInt("battles_lost"));			
+											 myRs.getInt("battles_lost"),
+											 myRs.getInt("safari_battles_won"),
+											 myRs.getInt("safari_battles_lost"));			
 			
 			return theAccount;
 		}
 		finally {
 			// Cleanup JDBC objects
 			close(myConn, myStmt, myRs);
+		}
+	}
+
+	/**
+	 * Returns an Account object based on the given id.
+	 * 
+	 * @param id
+	 * @return Account from id.
+	 */
+	public Account getAccountFromId(int id) throws Exception {
+		Connection myConn 		 = null;
+		PreparedStatement myStmt = null;
+		ResultSet myRs 			 = null;
+		
+		try {			
+			// get connection to database
+			myConn = dataSource.getConnection();
+			
+			// create sql to get selected user
+			String sql = "SELECT * FROM accounts WHERE id=?";
+			
+			// create prepared statement
+			myStmt = myConn.prepareStatement(sql);
+			
+			// set parameters
+			myStmt.setInt(1, id);
+			
+			// execute statement
+			myRs = myStmt.executeQuery();
+	
+			// if no account found, throw exception
+			if (!myRs.next()) {
+				throw new Exception("No account with id " + id + " found!");
+			};
+		
+			// account found, return it	
+			Account theAccount = new Account(myRs.getString("username"),
+											 null,
+											 id,
+											 myRs.getInt("battles_won"),
+											 myRs.getInt("battles_lost"),
+											 myRs.getInt("safari_battles_won"),
+											 myRs.getInt("safari_battles_lost"));			
+			
+			return theAccount;
+		}
+		finally {
+			// Cleanup JDBC objects
+			close(myConn, myStmt, myRs);
+		}
+	}
+
+	/**
+	 * The account to update.
+	 * 
+	 * @param theAccount
+	 */
+	public void updateAccountStats(Account theAccount) throws Exception {
+		Connection myConn = null;
+		PreparedStatement myStmt = null;
+		
+		try {			
+			// get connection to database
+			myConn = dataSource.getConnection();
+			
+			// create sql to delete the player's pet
+			String sql = "UPDATE accounts " +
+						 "SET battles_won=?, " +
+						 "    battles_lost=?, " +
+						 "    safari_battles_won=?, " +
+						 "    safari_battles_lost=? " +
+						 "WHERE id=?";
+						
+			// prepare statement
+			myStmt = myConn.prepareStatement(sql);
+			
+			// set params
+			myStmt.setInt(1, theAccount.getBattlesWon());
+			myStmt.setInt(2, theAccount.getBattlesLost());
+			myStmt.setInt(3, theAccount.getSafariBattlesWon());
+			myStmt.setInt(4, theAccount.getSafariBattlesLost());
+			myStmt.setInt(5, theAccount.getId());
+			
+			// execute sql statement
+			myStmt.execute();
+		}
+		finally {
+			// clean up JDBC code
+			close(myConn, myStmt, null);
 		}
 	}
 }

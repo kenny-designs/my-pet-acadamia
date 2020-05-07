@@ -1,6 +1,7 @@
 package com.kennydesigns.pet.acadamia;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -16,6 +17,7 @@ import javax.sql.DataSource;
 
 /**
  * Servlet implementation class PetsControllerServlet
+ * Handles pet related requests.
  */
 @WebServlet("/PetsControllerServlet")
 public class PetsControllerServlet extends HttpServlet {
@@ -81,10 +83,58 @@ public class PetsControllerServlet extends HttpServlet {
 			case "DELETE_PLAYER_PET":
 				deletePlayerPet(request, response);
 				break;
+				
+			// remove pet from player's team
+			case "REMOVE_PET_FROM_TEAM":
+				removePetFromTeam(request, response);
+				break;
+				
+			// remove pet from player's team
+			case "ADD_PET_TO_TEAM":
+				addPetToTeam(request, response);
+				break;	
 			}			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Add pet to the player's team
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
+	private void addPetToTeam(HttpServletRequest request, HttpServletResponse response)
+		throws Exception {
+		// get the id of the player's pet
+		int playerPetId = Integer.parseInt(request.getParameter("playerPetId"));
+	
+		// add pet to the player's team
+		petDbUtil.setPlayerPetTeam(playerPetId, true);
+		
+		// display the pets the player owns again
+		manageAccountTeam(request, response);	
+	}
+	
+	/**
+	 * Removes a pet from the player's team.
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
+	private void removePetFromTeam(HttpServletRequest request, HttpServletResponse response)
+		throws Exception {
+		// get the id of the player's pet
+		int playerPetId = Integer.parseInt(request.getParameter("playerPetId"));
+	
+		// update pet so that it is no longer a part of the team
+		petDbUtil.setPlayerPetTeam(playerPetId, false);
+		
+		// display the pets the player owns again
+		manageAccountTeam(request, response);
 	}
 
 	/**
@@ -122,10 +172,22 @@ public class PetsControllerServlet extends HttpServlet {
 		Account theAccount = (Account)session.getAttribute("LOGGED_USER");
 	
 		// get all the pets belonging to the account
-		List<PlayerPet> playerPets = petDbUtil.getAccountPlayerPets(theAccount);
-		
+		List<PlayerPet> petCollection = petDbUtil.getAccountPlayerPets(theAccount);
+	
+		// separate pets on a team from the rest of the collection
+		List<PlayerPet> currentTeam = new ArrayList<>();
+		for (int i = 0; i < petCollection.size();) {
+			if (petCollection.get(i).isTeam()) {	
+				currentTeam.add(petCollection.remove(i));
+			}
+			else {
+				i++;
+			}
+		}
+
 		// add the list of the player's pets to the request
-		request.setAttribute("PLAYER_PETS_LIST", playerPets);	
+		request.setAttribute("PLAYER_PETS_COLLECTION", petCollection);	
+		request.setAttribute("PLAYER_PETS_TEAM", currentTeam);	
 		
 		// display manage-team.jsp page
 		RequestDispatcher dispatcher = request.getRequestDispatcher("./manage-team.jsp");

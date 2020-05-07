@@ -23,9 +23,10 @@
 	<input type="submit" value="Manage Team" />
 </form>
 
-<a href="./safari.jsp">Safari</a>
-<br />
-<a href="./battledome.jsp">Battledome</a>
+<form action="BattleControllerServlet" method="POST">
+	<input type="hidden" name="command" value="ENTER_SAFARI" />
+	<input type="submit" value="Enter Safari" />
+</form>
 
 <form action="PetsControllerServlet" method="GET">
 	<input type="hidden" name="command" value="DISPLAY_ALL_PETS" />

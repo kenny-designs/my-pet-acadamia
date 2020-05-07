@@ -16,23 +16,9 @@ import javax.sql.DataSource;
  * @author crowly
  *
  */
-public class PetDbUtil {
-	private DataSource dataSource;
-
+public class PetDbUtil extends DbUtil {
 	public PetDbUtil(DataSource dataSource) {
-		this.dataSource = dataSource;
-	}
-
-	// TODO: make database parent class
-	private void close(Connection myConn, Statement myStmt, ResultSet myRs) {
-		try {
-			if (myRs   != null)   myRs.close();
-			if (myStmt != null) myStmt.close();
-			if (myConn != null) myConn.close();
-		}
-		catch(Exception exc) {
-			exc.printStackTrace();
-		}
+		super(dataSource);
 	}
 
 	/**
@@ -55,13 +41,8 @@ public class PetDbUtil {
 			myStmt = myConn.createStatement();	
 			myRs = myStmt.executeQuery(sql);
 		
-			while (myRs.next()) {				
-				Pet tempPet = new Pet(myRs.getInt("id"),
-									  myRs.getString("name"),
-									  myRs.getString("health_type"),
-									  myRs.getString("image"));
-				
-				pets.add(tempPet);
+			while (myRs.next()) {
+				pets.add(getPetFromId(myRs.getInt("id")));
 			}
 			
 			return pets;
@@ -99,16 +80,13 @@ public class PetDbUtil {
 			// execute statement
 			myRs = myStmt.executeQuery();
 	
-			// if no pet found, return null
-			if (!myRs.next()) return null;
+			// if no pet found, throw exception
+			if (!myRs.next()) {
+				throw new Exception("No pet found with name " + petName);
+			};
 		
-			// pet found, return it	
-			Pet thePet = new Pet(myRs.getInt("id"),
-								 myRs.getString("name"),
-								 myRs.getString("health_type"),
-								 myRs.getString("image"));
-			
-			return thePet;
+			// pet found, return it		
+			return getPetFromId(myRs.getInt("id"));
 		}
 		finally {
 			// Cleanup JDBC objects
@@ -121,9 +99,11 @@ public class PetDbUtil {
 	 * 
 	 * @param theAccount
 	 * @param thePet
+	 * @param bTeam
 	 * @throws Exception
 	 */
-	public void addPetToAccount(Account theAccount, Pet thePet) throws Exception {
+	public void addPetToAccount(Account theAccount, Pet thePet, boolean bTeam)
+			throws Exception {
 		Connection 		  myConn = null;
 		PreparedStatement myStmt = null;
 		
@@ -133,14 +113,15 @@ public class PetDbUtil {
 			
 			// create sql for insert
 			String sql = "INSERT INTO player_pets " +
-						 "(pet_id, account_id) " +
-						 "VALUES (?, ?)";
+						 "(pet_id, account_id, is_team) " +
+						 "VALUES (?, ?, ?)";
 			
 			myStmt = myConn.prepareStatement(sql);
 			
 			// set the param values for the student
 			myStmt.setInt(1, thePet.getId());
 			myStmt.setInt(2, theAccount.getId());
+			myStmt.setBoolean(3, bTeam);
 			
 			// execute sql insert
 			myStmt.execute();	
@@ -195,6 +176,7 @@ public class PetDbUtil {
 				PlayerPet tempPlayerPet = new PlayerPet(myRs.getInt("id"),
 													    myRs.getInt("level"),
 													    myRs.getInt("exp"),
+													    myRs.getBoolean("is_team"),
 													    tempPet,
 													    theAccount);
 					
@@ -215,6 +197,17 @@ public class PetDbUtil {
 	 * @param playerPetId
 	 */
 	public void deletePlayerPet(int playerPetId) throws Exception {
+		deleteRowWithId("player_pets", playerPetId);
+	}
+
+	/**
+	 * Updates the team status of a player pet in the database.
+	 * 
+	 * @param playerPetId
+	 * @param bTeam
+	 * @throws Exception
+	 */
+	public void setPlayerPetTeam(int playerPetId, boolean bTeam) throws Exception {
 		Connection myConn = null;
 		PreparedStatement myStmt = null;
 		
@@ -223,14 +216,204 @@ public class PetDbUtil {
 			myConn = dataSource.getConnection();
 			
 			// create sql to delete the player's pet
-			String sql = "DELETE FROM player_pets WHERE id=?";
-			
+			String sql = "UPDATE player_pets " +
+						 "SET is_team=? " +
+						 "WHERE id=?";
+						
 			// prepare statement
 			myStmt = myConn.prepareStatement(sql);
 			
 			// set params
-			myStmt.setInt(1, playerPetId);
+			myStmt.setBoolean(1, bTeam);
+			myStmt.setInt(2, playerPetId);
 			
+			// execute sql statement
+			myStmt.execute();
+		}
+		finally {
+			// clean up JDBC code
+			close(myConn, myStmt, null);
+		}
+	}
+
+	/**
+	 * Gets a list of player pets belonging to a player that is on their team
+	 * 
+	 * @param theAccount
+	 * @return
+	 * @throws Exception
+	 */
+	public List<PlayerPet> getAccountsTeam(Account theAccount)
+		throws Exception {
+		List<PlayerPet> petCollection = getAccountPlayerPets(theAccount);
+
+		// separate pets on a team from the rest of the collection
+		List<PlayerPet> currentTeam = new ArrayList<>();
+		for (int i = 0; i < petCollection.size();) {
+			if (petCollection.get(i).isTeam()) {	
+				currentTeam.add(petCollection.remove(i));
+			}
+			else {
+				i++;
+			}
+		}
+
+		return currentTeam;
+	}
+
+	/**
+	 * Returns the pet associated with the given id.
+	 * 
+	 * @param id
+	 * @return The pet matching the id
+	 */
+	public Pet getPetFromId(int id) throws Exception {
+		Connection        myConn = null;
+		PreparedStatement myStmt = null;
+		ResultSet         myRs   = null;
+		
+		try {			
+			// get connection to database
+			myConn = dataSource.getConnection();
+			
+			// create sql to get the pet based on id
+			String sql = "SELECT * FROM pets WHERE id=?";
+			
+			// create prepared statement
+			myStmt = myConn.prepareStatement(sql);
+			
+			// set parameters
+			myStmt.setInt(1, id);
+			
+			// execute statement
+			myRs = myStmt.executeQuery();
+	
+			// if no pet found, throw an exception
+			if (!myRs.next()) {
+				throw new Exception("Could not find pet with id: " + id);
+			}
+
+			// create list of skills available to the pet
+			List<String> skills = new ArrayList<>();
+			for (int i = 1; i <= 4; i++) {
+				String skillName = myRs.getString("skill_" + i + "_name");
+				if (skillName == null) break;
+				skills.add(skillName);
+			}
+
+			// create the pet
+			Pet thePet = new Pet(myRs.getInt("id"),
+					myRs.getString("name"),
+					myRs.getString("health_type"),
+					myRs.getString("image"),
+					myRs.getString("description"),
+					skills);
+
+			return thePet;
+		}
+		finally {
+			// Cleanup JDBC objects
+			close(myConn, myStmt, myRs);
+		}
+	}
+
+	/**
+	 * Creates a player pet object based on the given id.
+	 * @param accountDbUtil 
+	 * 
+	 * @param playerPetId
+	 * @return PlayerPet from the id.
+	 */
+	public PlayerPet getPlayerPetFromId(int id, AccountDbUtil accountDbUtil)
+			throws Exception {
+		Connection        myConn = null;
+		PreparedStatement myStmt = null;
+		ResultSet         myRs   = null;
+
+		try {			
+			// get connection to database
+			myConn = dataSource.getConnection();
+
+			// create sql to get the pet based on id
+			String sql = "SELECT * FROM player_pets WHERE id=?";
+
+			// create prepared statement
+			myStmt = myConn.prepareStatement(sql);
+
+			// set parameters
+			myStmt.setInt(1, id);
+
+			// execute statement
+			myRs = myStmt.executeQuery();
+
+			// if no pet found, throw an exception
+			if (!myRs.next()) {
+				throw new Exception("Could not find player pet with id: " + id);
+			}
+
+			// player pet found, return it				
+			PlayerPet playerPet = new PlayerPet(
+					myRs.getInt("id"),
+					myRs.getInt("level"),
+					myRs.getInt("exp"),
+					myRs.getBoolean("is_team"),
+					getPetFromId(myRs.getInt("pet_id")),
+					accountDbUtil.getAccountFromId(myRs.getInt("account_id")));
+
+			return playerPet;
+		}
+		finally {
+			// Cleanup JDBC objects
+			close(myConn, myStmt, myRs);
+		}
+	}
+
+	/**
+	 * Awards the player pet with exp.
+	 * 
+	 * @param playerPet
+	 * @param expGained
+	 */
+	public void givePlayerPetExp(PlayerPet playerPet, int expGained)
+		throws Exception {		
+		Connection myConn = null;
+		PreparedStatement myStmt = null;
+
+		try {	
+			// increment exp
+			int exp = playerPet.getExp() + expGained;
+			int level = playerPet.getLevel();
+
+			// check if level up
+			if (exp >= 1000) {
+				// check if pet is at level cap
+				if (level >= 10) {
+					level = 10;
+					exp = 1000;
+				}
+				// otherwise, level up as per normal
+				else {
+					level++;
+					exp -= 1000;
+				}
+			}
+
+			// get connection to database
+			myConn = dataSource.getConnection();
+
+			// create sql to delete the player's pet
+			String sql = "UPDATE player_pets " +
+					"SET exp=?, level=? " +
+					"WHERE id=?";
+
+			// prepare statement
+			myStmt = myConn.prepareStatement(sql);
+
+			// set params
+			myStmt.setInt(1, exp);
+			myStmt.setInt(2, level);
+			myStmt.setInt(3, playerPet.getId());
+
 			// execute sql statement
 			myStmt.execute();
 		}

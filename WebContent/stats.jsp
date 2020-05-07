@@ -21,7 +21,9 @@
 		<h3>Username: ${ACCOUNT_STATS.username}</h3>
 		<h4>
 			Battles Won: ${ACCOUNT_STATS.battlesWon} <br>
-			Battles Lost: ${ACCOUNT_STATS.battlesLost}
+			Battles Lost: ${ACCOUNT_STATS.battlesLost} <br>
+			Safari Battles Won: ${ACCOUNT_STATS.safariBattlesWon} <br>
+			Safari Battles Lost: ${ACCOUNT_STATS.safariBattlesLost}
 		</h4>
 	</c:otherwise>
 </c:choose>

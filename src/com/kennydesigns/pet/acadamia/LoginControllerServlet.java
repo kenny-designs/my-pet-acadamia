@@ -189,7 +189,7 @@ public class LoginControllerServlet extends HttpServlet {
 			// their chosen pet
 			Account theAccount = loginAccount(request, response);
 			Pet thePet = petDbUtil.getPetFromName(petName);
-			petDbUtil.addPetToAccount(theAccount, thePet);
+			petDbUtil.addPetToAccount(theAccount, thePet, true);
 		}
 	}
 }
