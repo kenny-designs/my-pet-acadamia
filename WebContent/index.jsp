@@ -8,7 +8,6 @@
 <meta charset="UTF-8">
 <title>My Pet Acadamia!</title>
 <link type="text/css" rel="stylesheet" href="css/index.css">
-<link type="text/css" rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
@@ -45,7 +44,11 @@
 	<input type="submit" value="Login" />
 </form>
 <br/>
-<a href="./create-account.jsp">Create Account</a>
+
+<form action="LoginControllerServlet" method="GET">
+	<input type="hidden" name="command" value="ACCOUNT_CREATION_PAGE" />
+	<input type="submit" value="Create Account" />
+</form>
 
 </div>
 </div>
