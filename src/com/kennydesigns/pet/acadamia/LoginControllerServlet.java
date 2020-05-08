@@ -1,6 +1,8 @@
 package com.kennydesigns.pet.acadamia;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.RequestDispatcher;
@@ -54,10 +56,38 @@ public class LoginControllerServlet extends HttpServlet {
 			case "DISPLAY_ACCOUNT_STATS":
 				displayAccountStats(request, response);
 				break;
+				
+			// take user to account creation
+			case "ACCOUNT_CREATION_PAGE":
+				accountCreationPage(request, response);
+				break;
+
 			}			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Fetches information needed for the user to create their account.
+	 * 
+	 * @param request
+	 * @param response
+	 */
+	private void accountCreationPage(HttpServletRequest request, HttpServletResponse response)
+		throws Exception {
+		// get list of starter pets
+		List<Pet> pets = new ArrayList<>();
+		pets.add(petDbUtil.getPetFromName("cat"));
+		pets.add(petDbUtil.getPetFromName("weezer"));
+		pets.add(petDbUtil.getPetFromName("chuck"));
+		
+		// set list as attribute		
+		request.setAttribute("STARTER_PETS", pets);	
+		
+		// take the user to the account creation page
+		RequestDispatcher dispatcher = request.getRequestDispatcher("./create-account.jsp");
+		dispatcher.forward(request, response);
 	}
 
 	/**

@@ -7,16 +7,19 @@
 <head>
 <meta charset="UTF-8">
 <title>My Pet Acadamia: Safari</title>
+<link type="text/css" rel="stylesheet" href="css/safari.css">
+<link type="text/css" rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<h1>Safari</h1>
+<div class="safari-bg"></div>
 
-<a href="./home.jsp">Return Home</a>
+<div class="middle">
+<h1>Safari.</h1>
 
 <c:choose>
 	<c:when test="${HAS_SAFARI_BATTLE}">
-		<h3>You have a battle going!</h3>
+		<h3>You have an ongoing battle!</h3>
 		<form action="BattleControllerServlet" method="POST">
 			<input type="hidden" name="command" value="LOAD_SAFARI_BATTLE" />
 			<input type="submit" value="Finish the Fight!" />
@@ -32,6 +35,9 @@
 		</form>
 	</c:otherwise>
 </c:choose>
+<br/>
+<a href="./home.jsp">Return Home</a>
+</div>
 
 </body>
 </html>

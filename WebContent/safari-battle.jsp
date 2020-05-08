@@ -8,10 +8,14 @@
 <meta charset="UTF-8">
 <title>My Pet Acadamia: Safari Battle</title>
 <link type="text/css" rel="stylesheet" href="css/style.css">
+<link type="text/css" rel="stylesheet" href="css/safari-battle.css">
 </head>
-<body class="battle-bg">
+<body>
 
-<a href="./home.jsp">Return Home</a>
+<div class="battle-bg">
+<div class="middle">
+
+<img class="versus" src="./images/versus.png">
 
 <!-- Create variables -->
 <c:set var="playerBattlePet" scope="request" value="${PLAYER_TEAM.getActiveBattlePet()}"/>
@@ -31,7 +35,7 @@
 				<input type="hidden" name="active-battle-pet-id" value="${playerBattlePet.id}" />
 				<input type="hidden" name="safari-battle-pet-id" value="${safariBattlePet.id}" />
 				<input type="submit" value="Swap" />
-			</form>
+			</form>	
 		</div>
 	  <div class="container" style="margin-top: 5px;">
 		<h4 style="margin-bottom: 0; text-align: center;">
@@ -40,7 +44,8 @@
 		</h4>
 	  </div>
 	</div>	
-	</c:forEach>
+	</c:forEach>	
+	<a href="./home.jsp">Return Home</a>
 	</div>
 	
 	<div class="card">
@@ -71,8 +76,6 @@
 	  </div>
 	</div>
 	
-	<img class="versus" src="./images/versus.png">
-
 	<div class="card">
 	  <img src="./images/${safariBattlePet.pet.imageURL}" alt="PetImage" style="width:100%">
 	  <div class="container">
@@ -106,6 +109,8 @@
 	</div>	
 	</c:forEach>
 	</div>	
+</div>
+</div>
 </div>
 
 </body>

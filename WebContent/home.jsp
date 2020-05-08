@@ -7,10 +7,14 @@
 <head>
 <meta charset="UTF-8">
 <title>My Pet Acadamia: Home</title>
+<link type="text/css" rel="stylesheet" href="css/home.css">
+<link type="text/css" rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<h1>Welcome Home ${LOGGED_USER.username}!</h1>
+<div class="home-bg">
+<div class="middle">
+<h1>Welcome ${LOGGED_USER.username}!</h1>
 
 <form action="LoginControllerServlet" method="GET">
 	<input type="hidden" name="command" value="DISPLAY_ACCOUNT_STATS" />
@@ -37,6 +41,8 @@
 	<input type="hidden" name="command" value="LOGOUT" />
 	<input type="submit" value="Logout" />
 </form>
+</div>
+</div>
 
 </body>
 </html>

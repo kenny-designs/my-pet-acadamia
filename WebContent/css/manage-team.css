@@ -1,0 +1,23 @@
+@charset "UTF-8";
+
+body, html {
+	height: 100%;
+	margin: 0;
+}
+
+.manage-team-bg {
+	background-image: url('../images/manage-team-bg.png');
+	height: 100%;
+	background-position: center;
+	background-size: cover;
+	background-attachment: fixed;
+}
+
+.header {
+	color: white;
+	margin-bottom: 0;
+}
+
+#team-container {
+	margin: 3em;
+}

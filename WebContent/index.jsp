@@ -7,55 +7,53 @@
 <head>
 <meta charset="UTF-8">
 <title>My Pet Acadamia!</title>
+<link type="text/css" rel="stylesheet" href="css/index.css">
+<link type="text/css" rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<h1>Boku No Pet Acadamia: Budokai Tenkaichi 3 Ultra Edition</h1>
+
+<div class="index-bg">
+<div class="middle">
+
+<!--
+<img src="./images/header-logo.png">
+-->
+
+<h1>Boku No Pet Acadamia: Budokai Tenkaichi 3 Ultra Edition!</h1>
 
 <c:if test="${LOGIN_FAILED}">
 	<p style="color: red;">Incorrect username and/or password!</p>
 </c:if>
 
-<form action="LoginControllerServlet" method="POST">
+<form action="LoginControllerServlet" method="POST" id="login-form">
 	<input type="hidden" name="command" value="LOGIN" />
-	<table>
-		<tbody>
-			<tr>
-				<td><label>Username: </label></td>
-				<td>
-					<input 
-						type="text"
-						name="username" 
-						maxlength="32"
-						minlength="3"
-						required
-					/>
-				</td>
-			</tr>
-			
-			<tr>
-				<td><label>Password: </label></td>
-				<td>
-					<input
-						type="password"
-						name="password"
-						maxlength="32"
-						minlength="8"
-						required
-					/>
-				</td>
-			</tr>
-							
-			<tr>
-				<td><label></label></td>
-				<td><input type="submit" value="Login" /></td>
-			</tr>
-		</tbody>
-	</table>
+	<input type="text"
+		   name="username"
+		   maxlength="32"
+		   minlength="3"
+		   placeholder="Username"
+		   required />	
+	<br/>
+	<input type="password"
+		   name="password"
+		   maxlength="32"
+		   minlength="8"
+		   placeholder="Password"
+		   required />
+	<br/>
+	<br/>
+	<input type="submit" value="Login" />
+</form>
+<br/>
+
+<form action="LoginControllerServlet" method="GET">
+	<input type="hidden" name="command" value="ACCOUNT_CREATION_PAGE" />
+	<input type="submit" value="Create Account" />
 </form>
 
-<br/>
-<a href="./create-account.jsp">Create Account</a>
+</div>
+</div>
 
 </body>
 </html>

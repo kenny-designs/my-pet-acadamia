@@ -1,74 +1,61 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+        
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>   
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>My Pet Acadamia: Account Creation</title>
+<link type="text/css" rel="stylesheet" href="css/create-account.css">
+<link type="text/css" rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<h1>Create a new account!</h1>
-
+<div class="create-account-bg">
+<div class="middle">
 <form action="LoginControllerServlet" method="POST">
 	<input type="hidden" name="command" value="CREATE_ACCOUNT" />
+	
+<div class="pet-row-container">	
+	<c:forEach var="tempPet" items="${STARTER_PETS}">
+	<label>	
+		<input type="radio" id="${tempPet.name}" name="petName" value="${tempPet.name}"
+		<c:if test="${tempPet.getName().equals(\"Cat\")}">checked</c:if> />
+		<div class="card small">
+	  		<img src="./images/${tempPet.imageURL}" alt="PetImage" style="width:100%">
+	  		<div class="container">
+				<h1><b>${tempPet.name}</b></h1> 
+				<hr />
+				<p><em>${tempPet.description}</em></p>
+	  		</div>
+		</div>
+	</label>
+	</c:forEach>
+</div>
 
-	<table>
-		<tbody>
-			<tr>
-				<td><label>Username: </label></td>
-				<td>
-					<input 
-						type="text"
-						name="username" 
-						maxlength="32"
-						minlength="3"
-						required
-					/>
-				</td>
-			</tr>
-			
-			<tr>
-				<td><label>Password: </label></td>
-				<td>
-					<input
-						type="password"
-						name="password"
-						maxlength="32"
-						minlength="8"
-						required
-					/>
-				</td>
-			</tr>
-		
-			<tr>		
-				<td><label>Pet: </label></td>
-				<td>
-					<input type="radio" id="cat" name="petName" value="Cat" checked>
-					<label for="cat">Cat</label>
-				</td>
-				
-				<td>
-					<input type="radio" id="weezer" name="petName" value="Weezer">
-					<label for="weezer">Weezer</label>
-				</td>
-				
-				<td>
-					<input type="radio" id="chuck" name="petName" value="Chuck">
-					<label for="chuck">Chuck</label>
-				</td>
-			</tr>
-					
-			<tr>
-				<td><label></label></td>
-				<td><input type="submit" value="Create Account" /></td>
-			</tr>
-		</tbody>
-	</table>
+	<input type="text"
+		   name="username" 
+		   maxlength="32"
+		   minlength="3"
+		   placeholder="Username"
+		   required />
+	<br/>
+	<input type="password"
+		   name="password"
+		   maxlength="32"
+		   minlength="8"
+		   placeholder="Password"
+		   required />
+	<br/>
+	
+	<input type="submit" value="Create Account" />
+	<br/>
+	<a href="./index.jsp">Return to Login</a>
 </form>
 
-<br/>
-<a href="./index.jsp">Return to Login</a>
+</div>
+</div>
 
 </body>
 </html>

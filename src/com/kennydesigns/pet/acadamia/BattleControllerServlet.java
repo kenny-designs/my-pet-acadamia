@@ -222,23 +222,27 @@ public class BattleControllerServlet extends HttpServlet {
 		if (isSafariBattleOver) {
 			// player won!
 			if (safariTeam.isTeamDead()) {
-				dispatcher = request.getRequestDispatcher("./safari-win.jsp");
 				theAccount.setSafariBattlesWon(theAccount.getSafariBattlesWon() + 1);
 				
 				// award exp to puts
 				for (BattlePet battlePet : playerTeam.getBattlePets()) {
 					petDbUtil.givePlayerPetExp(battlePet.getPlayerPet(), 300);
 				}
+				
+				request.setAttribute("IS_WINNER", true);
 			}
 			// player lost...
 			else {
-				dispatcher = request.getRequestDispatcher("./safari-lost.jsp");
 				theAccount.setSafariBattlesLost(theAccount.getSafariBattlesLost() + 1);
+				request.setAttribute("IS_WINNER", false);
 			}
 
 			// update account information and delete the battle
 			accountDbUtil.updateAccountStats(theAccount);
 			battleDbUtil.endSafariBattle(safariBattleInstanceId, playerTeam, safariTeam);
+
+			// display results page
+			dispatcher = request.getRequestDispatcher("./safari-battle-results.jsp");
 		}
 		
 		// go to the correct page

@@ -1,0 +1,44 @@
+@charset "UTF-8";
+
+body, html {
+	height: 100%;
+	margin: 0;
+}
+
+.create-account-bg {
+	background-image: url('../images/create-account-bg.png');
+	height: 100%;
+	background-position: center;
+	background-size: cover;
+	position: relative;
+	font-size: 25px;
+}
+
+.middle {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	text-align: center;
+}
+
+#create-account-form {
+	display: inline-block;
+}
+
+/* Hide Radio Buttons */
+[type=radio] {
+	position: absolute;
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+[type=radio] + .card {
+	cursor: pointer;
+}
+
+[type=radio]:checked + .card {
+	outline: 10px solid #AD7FA8;
+	border-radius: 0px;
+}
