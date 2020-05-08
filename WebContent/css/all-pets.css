@@ -1,0 +1,24 @@
+@charset "UTF-8";
+
+body, html {
+	height: 100%;
+	margin: 0;
+}
+
+.all-pets-bg {
+	background-image: url("../images/all-pets-bg.png");	
+	height: 100%;
+	background-position: center;
+	background-size: cover;
+	background-attachment: fixed;
+
+}
+
+.header {
+	color: white;
+	margin-bottom: 0;
+}
+
+#collection-container {
+	margin: 3em;
+}

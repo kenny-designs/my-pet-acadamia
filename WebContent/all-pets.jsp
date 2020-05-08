@@ -8,12 +8,15 @@
 <meta charset="UTF-8">
 <title>My Pet Acadamia: All Pets</title>
 <link type="text/css" rel="stylesheet" href="css/style.css">
+<link type="text/css" rel="stylesheet" href="css/all-pets.css">
 </head>
-<body class="wiki-bg">
+<body class="all-pets-bg">
 
-<h1>Gotta Adopt them All!</h1>
+<div id="collection-container">
 
 <a href="./home.jsp">Return Home</a>
+<h1 class="header">Gotta Adopt them All!</h1>
+<hr/>
 
 <div class="pet-flex-container">
 <c:forEach var="tempPet" items="${PET_LIST}">
@@ -28,6 +31,7 @@
 	  </div>
 	</div>
 </c:forEach>
+</div>
 </div>
 
 </body>
