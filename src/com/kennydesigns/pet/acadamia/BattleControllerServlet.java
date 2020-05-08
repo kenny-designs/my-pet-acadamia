@@ -136,7 +136,7 @@ public class BattleControllerServlet extends HttpServlet {
 		// create battle pet objects from id
 		BattlePet playerBattlePet = battleDbUtil.getBattlePetFromId(playerBattlePetId, petDbUtil, accountDbUtil);
 		BattlePet safariBattlePet = battleDbUtil.getBattlePetFromId(safariBattlePetId, petDbUtil, accountDbUtil);
-		
+			
 		// get skill names
 		String playerSkillName = request.getParameter("skill-name");
 		String safariSkillName = safariBattlePet.getPet().getRandomSkill();

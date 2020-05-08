@@ -35,7 +35,9 @@
 				<input type="hidden" name="inactive-battle-pet-id" value="${playerInactivePet.id}" />
 				<input type="hidden" name="active-battle-pet-id" value="${playerBattlePet.id}" />
 				<input type="hidden" name="safari-battle-pet-id" value="${safariBattlePet.id}" />
-				<input type="submit" value="Swap" />
+				<input type="submit"
+					   value="Swap"
+					   <c:if test="${playerInactivePet.dead}">disabled</c:if>/>
 			</form>	
 		</div>
 	  <div class="container" style="margin-top: 5px;">
@@ -71,7 +73,9 @@
 				<input type="hidden" name="skill-name" value="${skillName}" />
 				<input type="hidden" name="player-battle-pet-id" value="${playerBattlePet.id}" />
 				<input type="hidden" name="safari-battle-pet-id" value="${safariBattlePet.id}" />
-				<input type="submit" value="${skillName}" />
+				<input type="submit"
+					   value="${skillName}"
+					   <c:if test="${playerBattlePet.dead}">disabled</c:if>/>
 			</form>
 		</c:forEach>
 	  </div>

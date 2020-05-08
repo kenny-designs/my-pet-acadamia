@@ -186,5 +186,14 @@ public class BattlePet {
 	 */
 	public void setPlayerPet(PlayerPet playerPet) {
 		this.playerPet = playerPet;
-	}	
+	}
+
+	/**
+	 * Checks if the battle pet is dead.
+	 * 
+	 * @return True is dead. False otherwise.
+	 */
+	public boolean isDead() {
+		return hitpoints <= 0;
+	}
 }
