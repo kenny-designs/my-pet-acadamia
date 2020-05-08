@@ -90,6 +90,9 @@ public class AccountDbUtil extends DbUtil {
 		PreparedStatement myStmt = null;
 		
 		try {
+			// if user already exists, return false
+			if (getAccount(username) != null) return false;
+			
 			// get db connection
 			myConn = dataSource.getConnection();
 			

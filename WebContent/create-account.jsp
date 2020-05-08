@@ -42,6 +42,11 @@
 		   maxlength="32"
 		   minlength="3"
 		   placeholder="Username"
+		   <c:if test="${CREATION_FAILED}">
+		   		value="${USERNAME}"
+		   		style="border: 2px solid red;"
+		   </c:if>
+	   
 		   required />
 	<br/>
 	<input type="password"
