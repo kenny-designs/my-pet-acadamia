@@ -1,5 +1,19 @@
 @charset "UTF-8";
 
+a {
+	text-decoration: none;
+	color: white;
+	background-color: #6B3D66;
+	border-radius: 5px;
+	padding: 0.5em 0.75em;	
+	font-size: 16px;
+	margin: 0;
+}
+
+a:hover {
+	background-color: #AD7FA8;
+}
+
 /* Cards to display pets in */
 .card {
 	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
@@ -15,8 +29,9 @@
 	font-size: 0.5em;
 }
 
-.card input[type=submit] {
-	background-color: #ad7fa8;
+/* Submit Button Styles */
+input[type=submit] {
+	background-color: #6B3D66;
 	border: none;
 	color: white;
 	padding: 7px 14px;
@@ -25,10 +40,34 @@
 	display: inline-block;
 	font-size: 16px;
 	border-radius: 5px;
+	margin-top: 5px;
+	margin-bottom: 5px;
 }
 
-.card input[type=submit]:hover {
-	opacity: 0.8;
+input[type=submit]:hover {
+	background-color: #AD7FA8;	
+}
+
+/* Text Input Styles */
+input[type=text] {
+	outline: none;
+	border: none;
+	padding: 5px 10px;
+}
+
+input[type=text]:focus {
+	background-color: #AD7FA8;
+}
+
+/* Password Input Styles */
+input[type=password] {
+	outline: none;
+	border: none;
+	padding: 5px 10px;
+}
+
+input[type=password]:focus {
+	background-color: #AD7FA8;
 }
 
 .card hr {
@@ -42,6 +81,7 @@
 
 .card h2 {
 	margin-top: 0;
+	margin-bottom: 0;
 }
 
 .card h4 {

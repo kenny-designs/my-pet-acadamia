@@ -7,9 +7,13 @@
 <head>
 <meta charset="UTF-8">
 <title>My Pet Acadamia: Stats</title>
+<link type="text/css" rel="stylesheet" href="css/stats.css">
+<link type="text/css" rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
+<div class="stats-bg"></div>
+<div class="middle">
 <h1>Player Statistics</h1>
 
 <c:choose>
@@ -18,18 +22,17 @@
 	</c:when>
 	
 	<c:otherwise>
-		<h3>Username: ${ACCOUNT_STATS.username}</h3>
-		<h4>
-			Battles Won: ${ACCOUNT_STATS.battlesWon} <br>
-			Battles Lost: ${ACCOUNT_STATS.battlesLost} <br>
+		<h2>${ACCOUNT_STATS.username}</h2>
+		<h3>
 			Safari Battles Won: ${ACCOUNT_STATS.safariBattlesWon} <br>
 			Safari Battles Lost: ${ACCOUNT_STATS.safariBattlesLost}
-		</h4>
+		</h3>
 	</c:otherwise>
 </c:choose>
 
 <br />
 <a href="./home.jsp">Return Home</a>
+</div>
 
 </body>
 </html>

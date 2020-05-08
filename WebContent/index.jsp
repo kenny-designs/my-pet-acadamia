@@ -8,6 +8,7 @@
 <meta charset="UTF-8">
 <title>My Pet Acadamia!</title>
 <link type="text/css" rel="stylesheet" href="css/index.css">
+<link type="text/css" rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
@@ -18,7 +19,10 @@
 
 <div class="index-bg">
 <div class="middle">
+
+<!--
 <img src="./images/header-logo.png">
+-->
 
 
 <c:if test="${LOGIN_FAILED}">
