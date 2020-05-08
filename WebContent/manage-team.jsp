@@ -8,14 +8,14 @@
 <meta charset="UTF-8">
 <title>My Pet Acadamia: Team</title>
 <link type="text/css" rel="stylesheet" href="css/style.css">
+<link type="text/css" rel="stylesheet" href="css/manage-team.css">
 </head>
-<body>
+<body class="manage-team-bg">
 
-<h1>Manage Team</h1>
-
+<div id="team-container">
 <a href="./home.jsp">Return Home</a>
 
-<h1>You Current Team</h1>
+<h1 class="header">Your Current Team</h1>
 <hr />
 
 <div class="pet-flex-container">
@@ -53,7 +53,7 @@
 </div>
 
 
-<h1>Rest of Your Pet Collection</h1>
+<h1 class="header">Rest of Your Pet Collection</h1>
 <hr />
 <div class="pet-flex-container">
 <c:forEach var="tempPet" items="${PLAYER_PETS_COLLECTION}">
@@ -95,6 +95,7 @@
 	  </div>
 	</div>	
 </c:forEach>
+</div>
 </div>
 
 </body>

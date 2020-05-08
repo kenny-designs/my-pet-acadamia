@@ -56,7 +56,7 @@ input[type=text] {
 }
 
 input[type=text]:focus {
-	background-color: #AD7FA8;
+	border-bottom: 3px solid #6B3D66;
 }
 
 /* Password Input Styles */
@@ -67,7 +67,7 @@ input[type=password] {
 }
 
 input[type=password]:focus {
-	background-color: #AD7FA8;
+	border-bottom: 3px solid #6B3D66;
 }
 
 .card hr {

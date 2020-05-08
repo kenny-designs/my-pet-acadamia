@@ -17,17 +17,6 @@
 <form action="LoginControllerServlet" method="POST">
 	<input type="hidden" name="command" value="CREATE_ACCOUNT" />
 	
-	<!--
-	<input type="radio" id="cat" name="petName" value="Cat" checked>
-	<label for="cat">Cat</label>
-				
- 	<input type="radio" id="weezer" name="petName" value="Weezer">
-	<label for="weezer">Weezer</label>
-				
-	<input type="radio" id="chuck" name="petName" value="Chuck">
-	<label for="chuck">Chuck</label>
-	-->	
-
 <div class="pet-row-container">	
 	<c:forEach var="tempPet" items="${STARTER_PETS}">
 	<label>	
@@ -61,10 +50,9 @@
 	<br/>
 	
 	<input type="submit" value="Create Account" />
+	<br/>
+	<a href="./index.jsp">Return to Login</a>
 </form>
-
-<br/>
-<a href="./index.jsp">Return to Login</a>
 
 </div>
 </div>

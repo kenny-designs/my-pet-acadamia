@@ -12,10 +12,6 @@
 </head>
 <body>
 
-<!--
-<h1>Boku No Pet Acadamia: Budokai Tenkaichi 3 Ultra Edition</h1>
--->
-
 
 <div class="index-bg">
 <div class="middle">
@@ -24,6 +20,7 @@
 <img src="./images/header-logo.png">
 -->
 
+<h1>Boku No Pet Acadamia: Budokai Tenkaichi 3 Ultra Edition!</h1>
 
 <c:if test="${LOGIN_FAILED}">
 	<p style="color: red;">Incorrect username and/or password!</p>
@@ -44,6 +41,7 @@
 		   minlength="8"
 		   placeholder="Password"
 		   required />
+	<br/>
 	<br/>
 	<input type="submit" value="Login" />
 </form>

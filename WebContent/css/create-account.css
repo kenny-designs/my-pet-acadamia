@@ -6,7 +6,7 @@ body, html {
 }
 
 .create-account-bg {
-	background-image: url('../images/index-bg.png');
+	background-image: url('../images/create-account-bg.png');
 	height: 100%;
 	background-position: center;
 	background-size: cover;
@@ -39,6 +39,6 @@ body, html {
 }
 
 [type=radio]:checked + .card {
-	outline: 10px solid yellow;
+	outline: 10px solid #AD7FA8;
 	border-radius: 0px;
 }
