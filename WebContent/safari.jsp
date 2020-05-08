@@ -9,6 +9,7 @@
 <title>My Pet Acadamia: Safari</title>
 <link type="text/css" rel="stylesheet" href="css/safari.css">
 <link type="text/css" rel="stylesheet" href="css/style.css">
+<script src="./js/util.js"></script>
 </head>
 <body>
 
@@ -20,7 +21,7 @@
 <c:choose>
 	<c:when test="${HAS_SAFARI_BATTLE}">
 		<h3>You have an ongoing battle!</h3>
-		<form action="BattleControllerServlet" method="POST">
+		<form action="BattleControllerServlet" method="POST" onsubmit="disableAllInputSubmit()">
 			<input type="hidden" name="command" value="LOAD_SAFARI_BATTLE" />
 			<input type="submit" value="Finish the Fight!" />
 		</form>
@@ -29,7 +30,7 @@
 	
 	<c:otherwise>
 		<h3>No battle. Find one?</h3>
-		<form action="BattleControllerServlet" method="POST">
+		<form action="BattleControllerServlet" method="POST" onsubmit="disableAllInputSubmit()">
 			<input type="hidden" name="command" value="NEW_SAFARI_BATTLE" />
 			<input type="submit" value="Fight Random Pet!" />
 		</form>

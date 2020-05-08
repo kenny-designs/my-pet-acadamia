@@ -9,6 +9,7 @@
 <title>My Pet Acadamia: Safari Battle</title>
 <link type="text/css" rel="stylesheet" href="css/style.css">
 <link type="text/css" rel="stylesheet" href="css/safari-battle.css">
+<script src="./js/util.js"></script>
 </head>
 <body>
 
@@ -28,7 +29,7 @@
 	<div class="card">
 		<div style="display: flex; justify-content: space-evenly;">
 			<img src="./images/${playerInactivePet.pet.imageURL}" alt="PetImage">
-			<form action="BattleControllerServlet" method="POST">
+			<form action="BattleControllerServlet" method="POST" onsubmit="disableAllInputSubmit()">
 				<input type="hidden" name="command" value="SWAP_SAFARI_BATTLE" />
 				<input type="hidden" name="team-id" value="${PLAYER_TEAM.id}" />
 				<input type="hidden" name="inactive-battle-pet-id" value="${playerInactivePet.id}" />
@@ -65,7 +66,7 @@
 		
 		<!-- Display available skills -->	
 		<c:forEach var="skillName" items="${playerBattlePet.pet.skills}">
-			<form action="BattleControllerServlet" method="POST">
+			<form action="BattleControllerServlet" method="POST" onsubmit="disableAllInputSubmit()">
 				<input type="hidden" name="command" value="SKILL_SAFARI_BATTLE" />
 				<input type="hidden" name="skill-name" value="${skillName}" />
 				<input type="hidden" name="player-battle-pet-id" value="${playerBattlePet.id}" />
