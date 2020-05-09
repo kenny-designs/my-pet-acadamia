@@ -9,6 +9,7 @@
 <title>My Pet Acadamia: Safari Battle</title>
 <link type="text/css" rel="stylesheet" href="css/style.css">
 <link type="text/css" rel="stylesheet" href="css/safari-battle.css">
+<script src="./js/util.js"></script>
 </head>
 <body>
 
@@ -28,13 +29,15 @@
 	<div class="card">
 		<div style="display: flex; justify-content: space-evenly;">
 			<img src="./images/${playerInactivePet.pet.imageURL}" alt="PetImage">
-			<form action="BattleControllerServlet" method="POST">
+			<form action="BattleControllerServlet" method="POST" onsubmit="disableAllInputSubmit()">
 				<input type="hidden" name="command" value="SWAP_SAFARI_BATTLE" />
 				<input type="hidden" name="team-id" value="${PLAYER_TEAM.id}" />
 				<input type="hidden" name="inactive-battle-pet-id" value="${playerInactivePet.id}" />
 				<input type="hidden" name="active-battle-pet-id" value="${playerBattlePet.id}" />
 				<input type="hidden" name="safari-battle-pet-id" value="${safariBattlePet.id}" />
-				<input type="submit" value="Swap" />
+				<input type="submit"
+					   value="Swap"
+					   <c:if test="${playerInactivePet.dead}">disabled</c:if>/>
 			</form>	
 		</div>
 	  <div class="container" style="margin-top: 5px;">
@@ -46,6 +49,16 @@
 	</div>	
 	</c:forEach>	
 	<a href="./home.jsp">Return Home</a>
+	
+	<br/><br/>
+	
+	<form action="BattleControllerServlet" method="POST" onsubmit="disableAllInputSubmit()">
+		<input type="hidden" name="command" value="CATCH_PET" />
+		<input type="hidden" name="battle-pet-id" value="${safariBattlePet.id}" />
+		<input type="submit"
+			   value="Catch ${safariBattlePet.pet.name}"
+			   <c:if test="${!safariBattlePet.catchable}">disabled</c:if>/>
+	</form>
 	</div>
 	
 	<div class="card">
@@ -65,12 +78,14 @@
 		
 		<!-- Display available skills -->	
 		<c:forEach var="skillName" items="${playerBattlePet.pet.skills}">
-			<form action="BattleControllerServlet" method="POST">
+			<form action="BattleControllerServlet" method="POST" onsubmit="disableAllInputSubmit()">
 				<input type="hidden" name="command" value="SKILL_SAFARI_BATTLE" />
 				<input type="hidden" name="skill-name" value="${skillName}" />
 				<input type="hidden" name="player-battle-pet-id" value="${playerBattlePet.id}" />
 				<input type="hidden" name="safari-battle-pet-id" value="${safariBattlePet.id}" />
-				<input type="submit" value="${skillName}" />
+				<input type="submit"
+					   value="${skillName}"
+					   <c:if test="${playerBattlePet.dead}">disabled</c:if>/>
 			</form>
 		</c:forEach>
 	  </div>

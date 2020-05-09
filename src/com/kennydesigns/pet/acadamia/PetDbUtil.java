@@ -131,6 +131,60 @@ public class PetDbUtil extends DbUtil {
 			close(myConn, myStmt, null);
 		}	
 	}
+	
+	/**
+	 * Adds a pet based on the given BattlePet to the
+	 * given player's account.
+	 * 
+	 * @param theAccount
+	 * @param thePet
+	 * @param accountDbUtil TODO
+	 * @return The added PlayerPet
+	 * @throws Exception
+	 */
+	public PlayerPet addBattlePetToAccount(Account theAccount, BattlePet thePet, AccountDbUtil accountDbUtil)
+			throws Exception {
+		Connection 		  myConn = null;
+		PreparedStatement myStmt = null;		
+		ResultSet         myRs   = null;
+		
+		try {
+			// get db connection
+			myConn = dataSource.getConnection();
+			
+			// create sql for insert
+			String sql = "INSERT INTO player_pets " +
+						 "(pet_id, level, account_id) " +
+						 "VALUES (?, ?, ?)";
+			
+			myStmt = myConn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			
+			// set the param values for the student
+			myStmt.setInt(1, thePet.getPet().getId());
+			myStmt.setInt(2, thePet.getLevel());
+			myStmt.setInt(3, theAccount.getId());
+			
+			// execute sql insert
+			myStmt.execute();	
+			
+			// get the id of the inserted battle pet
+			myRs = myStmt.getGeneratedKeys();
+			
+			// if failed, throw exception
+			if (!myRs.next()) {
+				throw new Exception("Failed to add caught pet!");
+			};
+		
+			// create battle pet and return
+			int playerPetId = myRs.getInt(1);	
+			return getPlayerPetFromId(playerPetId, accountDbUtil);
+
+		}
+		finally {
+			// clean up JDBC objects
+			close(myConn, myStmt, null);
+		}	
+	}
 
 	/**
 	 * Return a list of all of the pets belonging to the currently logged in account.

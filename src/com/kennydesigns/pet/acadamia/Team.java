@@ -3,6 +3,7 @@
  */
 package com.kennydesigns.pet.acadamia;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -58,6 +59,22 @@ public class Team {
 	}
 
 	/**
+	 * Returns a list of only living battle pets on the team.
+	 * 
+	 * @return List of living battle pets.
+	 */
+	public List<BattlePet> getLivingBattlePets() {
+		List<BattlePet> livingPets = new ArrayList<>();
+		for (BattlePet bp : battlePets) {
+			if (!bp.isDead()) {
+				livingPets.add(bp);
+			}
+		}
+		
+		return livingPets;
+	}
+
+	/**
 	 * @return the id
 	 */
 	public int getId() {
@@ -107,8 +124,9 @@ public class Team {
 	 */
 	public boolean isTeamDead() {
 		for (BattlePet bp : battlePets) {
-			if (bp.getHitpoints() > 0) return false;
+			if (!bp.isDead()) return false;
 		}
+		
 		return true;
 	}
 }

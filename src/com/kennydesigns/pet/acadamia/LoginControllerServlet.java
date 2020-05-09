@@ -210,9 +210,9 @@ public class LoginControllerServlet extends HttpServlet {
 		
 		if (!isAdded) {
 			// couldn't create account, have the user try again
-			// TODO: let the user know if account creation was a failure
-			RequestDispatcher dispatcher = request.getRequestDispatcher("./create-account.jsp");
-			dispatcher.forward(request, response);
+			request.setAttribute("CREATION_FAILED", true);
+			request.setAttribute("USERNAME", username);			
+			accountCreationPage(request, response);
 		}
 		else {
 			// now that the account is made, log the user in and give them

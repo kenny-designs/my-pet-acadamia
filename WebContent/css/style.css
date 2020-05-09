@@ -19,6 +19,10 @@ input[type=submit]:hover {
 	background-color: #AD7FA8;	
 }
 
+input[type=submit]:disabled {	
+	background-color: #AD7FA8;
+}
+
 /* Text Input Styles */
 input[type=text] {
 	outline: none;
@@ -42,6 +46,7 @@ input[type=password]:focus {
 }
 
 a {
+	font-family: Arial;
 	text-decoration: none;
 	color: white;
 	background-color: #6B3D66;

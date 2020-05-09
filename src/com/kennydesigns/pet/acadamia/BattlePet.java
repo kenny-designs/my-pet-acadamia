@@ -186,5 +186,25 @@ public class BattlePet {
 	 */
 	public void setPlayerPet(PlayerPet playerPet) {
 		this.playerPet = playerPet;
-	}	
+	}
+
+	/**
+	 * Checks if the battle pet is dead.
+	 * 
+	 * @return True is dead. False otherwise.
+	 */
+	public boolean isDead() {
+		return hitpoints <= 0;
+	}
+
+	/**
+	 * Returns true if the pet is low enough on health
+	 * to be caught;
+	 * 
+	 * @return True if catchable. False otherwise.
+	 */
+	public boolean isCatchable() {
+		// catchable if at quarter health
+		return hitpoints < maxHitpoints / 4;
+	}
 }

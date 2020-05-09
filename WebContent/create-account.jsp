@@ -9,12 +9,15 @@
 <title>My Pet Acadamia: Account Creation</title>
 <link type="text/css" rel="stylesheet" href="css/create-account.css">
 <link type="text/css" rel="stylesheet" href="css/style.css">
+<script src="./js/util.js"></script>
 </head>
 <body>
 
 <div class="create-account-bg">
 <div class="middle">
-<form action="LoginControllerServlet" method="POST">
+<form action="LoginControllerServlet"
+	  method="POST"
+	  onsubmit="disableAllInputSubmit()">
 	<input type="hidden" name="command" value="CREATE_ACCOUNT" />
 	
 <div class="pet-row-container">	
@@ -39,6 +42,11 @@
 		   maxlength="32"
 		   minlength="3"
 		   placeholder="Username"
+		   <c:if test="${CREATION_FAILED}">
+		   		value="${USERNAME}"
+		   		style="border: 2px solid red;"
+		   </c:if>
+	   
 		   required />
 	<br/>
 	<input type="password"
