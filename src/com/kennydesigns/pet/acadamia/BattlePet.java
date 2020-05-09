@@ -196,4 +196,15 @@ public class BattlePet {
 	public boolean isDead() {
 		return hitpoints <= 0;
 	}
+
+	/**
+	 * Returns true if the pet is low enough on health
+	 * to be caught;
+	 * 
+	 * @return True if catchable. False otherwise.
+	 */
+	public boolean isCatchable() {
+		// catchable if at quarter health
+		return hitpoints < maxHitpoints / 4;
+	}
 }

@@ -165,7 +165,7 @@ public class BattleDbUtil extends DbUtil {
 			// get the id of the inserted battle pet
 			myRs = myStmt.getGeneratedKeys();
 			
-			// if failed, return null
+			// if failed, throw exception
 			if (!myRs.next()) {
 				throw new Exception("Failed to create new battle pet!");
 			};
@@ -836,11 +836,19 @@ public class BattleDbUtil extends DbUtil {
 	 * from the database.
 	 * 
 	 * @param safariBattleInstanceId
-	 * @param playerTeam
-	 * @param safariTeam
+	 * @param petDbUtil
+	 * @param accountDbUtil
 	 */
-	public void endSafariBattle(int safariBattleInstanceId, Team playerTeam, Team safariTeam) 
+	public void endSafariBattle(int safariBattleInstanceId, PetDbUtil petDbUtil, AccountDbUtil accountDbUtil) 
 		throws Exception {
+		// get everything related to the player's battle pets team
+		int playerTeamId = getPlayerTeamId(safariBattleInstanceId);		
+		Team playerTeam = getTeamFromId(playerTeamId, petDbUtil, accountDbUtil);
+					
+		// get everything related to the safari battle pets team
+		int safariTeamId = getSafariTeamId(safariBattleInstanceId);
+		Team safariTeam = getTeamFromId(safariTeamId, petDbUtil, accountDbUtil);
+		
 		// delete the safari battle instance
 		deleteRowWithId("safari_battle_instances", safariBattleInstanceId);
 		

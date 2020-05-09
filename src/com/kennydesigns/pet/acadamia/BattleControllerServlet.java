@@ -78,10 +78,46 @@ public class BattleControllerServlet extends HttpServlet {
 			case "SWAP_SAFARI_BATTLE":
 				swapPetsSafariBattle(request, response);
 				break;				
+							// use a skill in battle
+			case "CATCH_PET":
+				catchSafariPet(request, response);
+				break;					
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Add safari pet to player's account.
+	 * 
+	 * @param request
+	 * @param response
+	 */
+	private void catchSafariPet(HttpServletRequest request, HttpServletResponse response)
+		throws Exception {
+		// get the currently logged in account
+		HttpSession session = request.getSession();
+		Account theAccount = (Account)session.getAttribute("LOGGED_USER");
+
+		// get the id of the pet to add to the account
+		int battlePetId = Integer.parseInt(request.getParameter("battle-pet-id"));
+		BattlePet bp = battleDbUtil.getBattlePetFromId(battlePetId, petDbUtil, accountDbUtil);
+		
+		// add the pet to the account
+		PlayerPet addedPlayerPet = petDbUtil.addBattlePetToAccount(theAccount, bp, accountDbUtil);
+		request.setAttribute("CAUGHT_PLAYER_PET", addedPlayerPet);
+		
+		// get the id for the safari battle instance
+		int safariBattleInstanceId = battleDbUtil.getSafariBattleInstanceId(theAccount);
+			
+		// end the battle
+		battleDbUtil.endSafariBattle(safariBattleInstanceId, petDbUtil, accountDbUtil);
+			
+		// display results page
+		RequestDispatcher dispatcher = request.getRequestDispatcher("./safari-catch.jsp");
+		dispatcher.forward(request, response);
+
 	}
 
 	/**
@@ -239,7 +275,7 @@ public class BattleControllerServlet extends HttpServlet {
 
 			// update account information and delete the battle
 			accountDbUtil.updateAccountStats(theAccount);
-			battleDbUtil.endSafariBattle(safariBattleInstanceId, playerTeam, safariTeam);
+			battleDbUtil.endSafariBattle(safariBattleInstanceId, petDbUtil, accountDbUtil);
 
 			// display results page
 			dispatcher = request.getRequestDispatcher("./safari-battle-results.jsp");

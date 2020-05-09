@@ -49,6 +49,16 @@
 	</div>	
 	</c:forEach>	
 	<a href="./home.jsp">Return Home</a>
+	
+	<br/><br/>
+	
+	<form action="BattleControllerServlet" method="POST" onsubmit="disableAllInputSubmit()">
+		<input type="hidden" name="command" value="CATCH_PET" />
+		<input type="hidden" name="battle-pet-id" value="${safariBattlePet.id}" />
+		<input type="submit"
+			   value="Catch ${safariBattlePet.pet.name}"
+			   <c:if test="${!safariBattlePet.catchable}">disabled</c:if>/>
+	</form>
 	</div>
 	
 	<div class="card">
