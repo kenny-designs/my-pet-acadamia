@@ -22,6 +22,7 @@ body, html {
 	text-align: center;
 	color: white;
 	background-color: rgba(0, 0, 0, 0.75);
+	border-radius: 5px;
 	padding: 30px;
 }
 
