@@ -1,8 +1,14 @@
+<!-- 
+Use the following for development:
+
+url="jdbc:mysql://localhost:3306/pet_acadamia_db?allowPublicKeyRetrieval=true&amp;useSSL=false&amp;serverTimezone=UTC"/>
+ -->
+
 <Context>
   <Resource name="jdbc/pet_acadamia_db" 
   			auth="Container" type="javax.sql.DataSource"
                maxActive="20" maxIdle="5" maxWait="10000"
                username="petuser" password="cemePet29" 
                driverClassName="com.mysql.cj.jdbc.Driver"
-               url="jdbc:mysql://localhost:3306/pet_acadamia_db?useSSL=false&amp;serverTimezone=UTC"/>
+               url="jdbc:mysql://192.168.1.235:3306/pet_acadamia_db?allowPublicKeyRetrieval=true&amp;useSSL=false&amp;serverTimezone=UTC"/>
 </Context>
