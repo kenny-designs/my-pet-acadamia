@@ -143,7 +143,6 @@ public class PetsControllerServlet extends HttpServlet {
 	/**
 	 * Removes a pet from a player's possession (that poor animal... Now they're
 	 * gone forever!)
-	 * TODO: make sure player can't delete their only pet
 	 * 
 	 * @param request
 	 * @param response

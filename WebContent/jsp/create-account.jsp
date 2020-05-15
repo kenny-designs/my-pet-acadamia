@@ -11,6 +11,12 @@
 <link type="text/css" rel="stylesheet" href="${context}/css/create-account.css">
 <link type="text/css" rel="stylesheet" href="${context}/css/style.css">
 <script src="${context}/js/util.js"></script>
+
+<!-- favicon -->
+<link rel="apple-touch-icon" sizes="180x180" href="${context}/images/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="${context}/images/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="${context}/images/favicon/favicon-16x16.png">
+<link rel="manifest" href="${context}/images/favicon/site.webmanifest">
 </head>
 <body>
 
