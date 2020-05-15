@@ -7,9 +7,16 @@
 <head>
 <meta charset="UTF-8">
 <title>My Pet Acadamia: Account Creation</title>
-<link type="text/css" rel="stylesheet" href="css/create-account.css">
-<link type="text/css" rel="stylesheet" href="css/style.css">
-<script src="./js/util.js"></script>
+<c:set var="context" value="${pageContext.request.contextPath}" />
+<link type="text/css" rel="stylesheet" href="${context}/css/create-account.css">
+<link type="text/css" rel="stylesheet" href="${context}/css/style.css">
+<script src="${context}/js/util.js"></script>
+
+<!-- favicon -->
+<link rel="apple-touch-icon" sizes="180x180" href="${context}/images/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="${context}/images/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="${context}/images/favicon/favicon-16x16.png">
+<link rel="manifest" href="${context}/images/favicon/site.webmanifest">
 </head>
 <body>
 
@@ -26,7 +33,7 @@
 		<input type="radio" id="${tempPet.name}" name="petName" value="${tempPet.name}"
 		<c:if test="${tempPet.getName().equals(\"Cat\")}">checked</c:if> />
 		<div class="card small">
-	  		<img src="./images/${tempPet.imageURL}" alt="PetImage" style="width:100%">
+	  		<img src="${context}/images/${tempPet.imageURL}" alt="PetImage" style="width:100%">
 	  		<div class="container">
 				<h1><b>${tempPet.name}</b></h1> 
 				<hr />
@@ -59,7 +66,7 @@
 	
 	<input type="submit" value="Create Account" />
 	<br/>
-	<a href="./index.jsp">Return to Login</a>
+	<a href="${context}/index.jsp">Return to Login</a>
 </form>
 
 </div>

@@ -7,9 +7,16 @@
 <head>
 <meta charset="UTF-8">
 <title>My Pet Acadamia: Safari</title>
-<link type="text/css" rel="stylesheet" href="css/safari.css">
-<link type="text/css" rel="stylesheet" href="css/style.css">
-<script src="./js/util.js"></script>
+<c:set var="context" value="${pageContext.request.contextPath}" />
+<link type="text/css" rel="stylesheet" href="${context}/css/safari.css">
+<link type="text/css" rel="stylesheet" href="${context}/css/style.css">
+<script src="${context}/js/util.js"></script>
+
+<!-- favicon -->
+<link rel="apple-touch-icon" sizes="180x180" href="${context}/images/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="${context}/images/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="${context}/images/favicon/favicon-16x16.png">
+<link rel="manifest" href="${context}/images/favicon/site.webmanifest">
 </head>
 <body>
 
@@ -37,7 +44,7 @@
 	</c:otherwise>
 </c:choose>
 <br/>
-<a href="./home.jsp">Return Home</a>
+<a href="${context}/jsp/home.jsp">Return Home</a>
 </div>
 
 </body>

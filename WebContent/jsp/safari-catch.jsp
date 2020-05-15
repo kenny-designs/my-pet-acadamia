@@ -7,15 +7,22 @@
 <head>
 <meta charset="UTF-8">
 <title>My Pet Acadamia: Safari Caught</title>
-<link type="text/css" rel="stylesheet" href="css/safari-catch.css">
-<link type="text/css" rel="stylesheet" href="css/style.css">
+<c:set var="context" value="${pageContext.request.contextPath}" />
+<link type="text/css" rel="stylesheet" href="${context}/css/safari-catch.css">
+<link type="text/css" rel="stylesheet" href="${context}/css/style.css">
+
+<!-- favicon -->
+<link rel="apple-touch-icon" sizes="180x180" href="${context}/images/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="${context}/images/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="${context}/images/favicon/favicon-16x16.png">
+<link rel="manifest" href="${context}/images/favicon/site.webmanifest">
 </head>
 <body>
 
 <div class="safari-bg">
 <div class="middle">
 	<div class="card">
-	  <img src="./images/${CAUGHT_PLAYER_PET.pet.imageURL}" alt="PetImage" style="width:100%">
+	  <img src="${context}/images/${CAUGHT_PLAYER_PET.pet.imageURL}" alt="PetImage" style="width:100%">
 	  <div class="container">
 		<h1><b>${CAUGHT_PLAYER_PET.pet.name}</b></h1> 		
 		<h2><em>lvl. ${CAUGHT_PLAYER_PET.level}</em></h2>
@@ -39,14 +46,14 @@
 
 <div>
 	<h1>You Caught ${CAUGHT_PLAYER_PET.pet.name}!</h1>
-	<a href="./safari.jsp">Go to Safari</a>
+	<a href="${context}/jsp/safari.jsp">Go to Safari</a>
 	<br/><br/>
 	<form action="PetsControllerServlet" method="POST">
 		<input type="hidden" name="command" value="MANAGE_TEAM" />
 		<input type="submit" value="Manage Team" />
 	</form>	
 	<br/>
-	<a href="./home.jsp">Return Home</a>
+	<a href="${context}/jsp/home.jsp">Return Home</a>
 </div>
 
 </div>

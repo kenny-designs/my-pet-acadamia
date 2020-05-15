@@ -7,8 +7,15 @@
 <head>
 <meta charset="UTF-8">
 <title>My Pet Acadamia: Stats</title>
-<link type="text/css" rel="stylesheet" href="css/stats.css">
-<link type="text/css" rel="stylesheet" href="css/style.css">
+<c:set var="context" value="${pageContext.request.contextPath}" />
+<link type="text/css" rel="stylesheet" href="${context}/css/stats.css">
+<link type="text/css" rel="stylesheet" href="${context}/css/style.css">
+
+<!-- favicon -->
+<link rel="apple-touch-icon" sizes="180x180" href="${context}/images/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="${context}/images/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="${context}/images/favicon/favicon-16x16.png">
+<link rel="manifest" href="${context}/images/favicon/site.webmanifest">
 </head>
 <body>
 
@@ -31,7 +38,7 @@
 </c:choose>
 
 <br />
-<a href="./home.jsp">Return Home</a>
+<a href="${context}/jsp/home.jsp">Return Home</a>
 </div>
 
 </body>

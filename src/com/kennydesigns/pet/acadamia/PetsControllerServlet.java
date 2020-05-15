@@ -19,7 +19,10 @@ import javax.sql.DataSource;
  * Servlet implementation class PetsControllerServlet
  * Handles pet related requests.
  */
-@WebServlet("/PetsControllerServlet")
+@WebServlet(urlPatterns = {
+		"/PetsControllerServlet",
+		"/jsp/PetsControllerServlet"
+		})
 public class PetsControllerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 		
@@ -140,7 +143,6 @@ public class PetsControllerServlet extends HttpServlet {
 	/**
 	 * Removes a pet from a player's possession (that poor animal... Now they're
 	 * gone forever!)
-	 * TODO: make sure player can't delete their only pet
 	 * 
 	 * @param request
 	 * @param response
@@ -190,7 +192,7 @@ public class PetsControllerServlet extends HttpServlet {
 		request.setAttribute("PLAYER_PETS_TEAM", currentTeam);	
 		
 		// display manage-team.jsp page
-		RequestDispatcher dispatcher = request.getRequestDispatcher("./manage-team.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/manage-team.jsp");
 		dispatcher.forward(request, response);
 	}
 
@@ -209,7 +211,7 @@ public class PetsControllerServlet extends HttpServlet {
 		request.setAttribute("PET_LIST", pets);
 		
 		// display all-pets.jsp to the user
-		RequestDispatcher dispatcher = request.getRequestDispatcher("./all-pets.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/all-pets.jsp");
 		dispatcher.forward(request, response);
 	}
 }
