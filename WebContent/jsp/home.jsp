@@ -7,8 +7,9 @@
 <head>
 <meta charset="UTF-8">
 <title>My Pet Acadamia: Home</title>
-<link type="text/css" rel="stylesheet" href="css/home.css">
-<link type="text/css" rel="stylesheet" href="css/style.css">
+<c:set var="context" value="${pageContext.request.contextPath}" />
+<link type="text/css" rel="stylesheet" href="${context}/css/home.css">
+<link type="text/css" rel="stylesheet" href="${context}/css/style.css">
 </head>
 <body>
 

@@ -7,21 +7,22 @@
 <head>
 <meta charset="UTF-8">
 <title>My Pet Acadamia: All Pets</title>
-<link type="text/css" rel="stylesheet" href="css/style.css">
-<link type="text/css" rel="stylesheet" href="css/all-pets.css">
+<c:set var="context" value="${pageContext.request.contextPath}" />
+<link type="text/css" rel="stylesheet" href="${context}/css/all-pets.css">
+<link type="text/css" rel="stylesheet" href="${context}/css/style.css">
 </head>
 <body class="all-pets-bg">
 
 <div id="collection-container">
 
-<a href="./home.jsp">Return Home</a>
+<a href="${context}/jsp/home.jsp">Return Home</a>
 <h1 class="header">Gotta Adopt them All!</h1>
 <hr/>
 
 <div class="pet-flex-container">
 <c:forEach var="tempPet" items="${PET_LIST}">
 	<div class="card">
-	  <img src="./images/${tempPet.imageURL}" alt="PetImage" style="width:100%">
+	  <img src="${context}/images/${tempPet.imageURL}" alt="PetImage" style="width:100%">
 	  <div class="container">
 		<h1><b>${tempPet.name}</b></h1> 
 		<hr />

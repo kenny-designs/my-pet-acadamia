@@ -18,7 +18,10 @@ import javax.sql.DataSource;
  * Servlet implementation class LoginControllerServlet.
  * Handles user login requests.
  */
-@WebServlet("/LoginControllerServlet")
+@WebServlet(urlPatterns = {
+		"/LoginControllerServlet",
+		"/jsp/LoginControllerServlet"
+		})
 public class LoginControllerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 		
@@ -86,7 +89,7 @@ public class LoginControllerServlet extends HttpServlet {
 		request.setAttribute("STARTER_PETS", pets);	
 		
 		// take the user to the account creation page
-		RequestDispatcher dispatcher = request.getRequestDispatcher("./create-account.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/create-account.jsp");
 		dispatcher.forward(request, response);
 	}
 
@@ -131,7 +134,7 @@ public class LoginControllerServlet extends HttpServlet {
 		request.setAttribute("ACCOUNT_STATS", theAccount);
 		
 		// display user statistics
-		RequestDispatcher dispatcher = request.getRequestDispatcher("./stats.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/stats.jsp");
 		dispatcher.forward(request, response);
 	}
 
@@ -149,7 +152,7 @@ public class LoginControllerServlet extends HttpServlet {
 		session.removeAttribute("LOGGED_USER");
 		
 		// return to login screen
-		RequestDispatcher dispatcher = request.getRequestDispatcher("./index.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
 		dispatcher.forward(request, response);
 	}
 
@@ -177,14 +180,14 @@ public class LoginControllerServlet extends HttpServlet {
 			session.setAttribute("LOGGED_USER", theAccount);
 			
 			// go to home page
-			dispatcher = request.getRequestDispatcher("./home.jsp");
+			dispatcher = request.getRequestDispatcher("/jsp/home.jsp");
 		}
 		else {
 			// set attribute saying login failed
 			request.setAttribute("LOGIN_FAILED", true);
-			
+					
 			// go to login page
-			dispatcher = request.getRequestDispatcher("./index.jsp");			
+			dispatcher = request.getRequestDispatcher("/index.jsp");			
 		}
 		
 		dispatcher.forward(request, response);

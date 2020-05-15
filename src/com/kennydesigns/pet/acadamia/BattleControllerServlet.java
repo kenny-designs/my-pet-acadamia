@@ -19,7 +19,10 @@ import javax.sql.DataSource;
  * Servlet implementation class BattleControllerServlet
  * Handles pet combat related actions for both pve and pvp.
  */
-@WebServlet("/BattleControllerServlet")
+@WebServlet(urlPatterns = {
+		"/BattleControllerServlet",
+		"/jsp/BattleControllerServlet"
+		})
 public class BattleControllerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 		
@@ -115,7 +118,7 @@ public class BattleControllerServlet extends HttpServlet {
 		battleDbUtil.endSafariBattle(safariBattleInstanceId, petDbUtil, accountDbUtil);
 			
 		// display results page
-		RequestDispatcher dispatcher = request.getRequestDispatcher("./safari-catch.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/safari-catch.jsp");
 		dispatcher.forward(request, response);
 
 	}
@@ -250,7 +253,7 @@ public class BattleControllerServlet extends HttpServlet {
 		request.setAttribute("SAFARI_TEAM", safariTeam);
 	
 		// return to the battle by default
-		RequestDispatcher dispatcher = request.getRequestDispatcher("./safari-battle.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/safari-battle.jsp");
 
 		// check if the battle is over
 		boolean isSafariBattleOver = safariTeam.isTeamDead() || playerTeam.isTeamDead();
@@ -278,7 +281,7 @@ public class BattleControllerServlet extends HttpServlet {
 			battleDbUtil.endSafariBattle(safariBattleInstanceId, petDbUtil, accountDbUtil);
 
 			// display results page
-			dispatcher = request.getRequestDispatcher("./safari-battle-results.jsp");
+			dispatcher = request.getRequestDispatcher("/jsp/safari-battle-results.jsp");
 		}
 		
 		// go to the correct page
@@ -357,7 +360,7 @@ public class BattleControllerServlet extends HttpServlet {
 		request.setAttribute("HAS_SAFARI_BATTLE", isInSafari);
 
 		// display safari page
-		RequestDispatcher dispatcher = request.getRequestDispatcher("./safari.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/safari.jsp");
 		dispatcher.forward(request, response);
 	}
 }

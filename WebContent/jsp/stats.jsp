@@ -7,8 +7,9 @@
 <head>
 <meta charset="UTF-8">
 <title>My Pet Acadamia: Stats</title>
-<link type="text/css" rel="stylesheet" href="css/stats.css">
-<link type="text/css" rel="stylesheet" href="css/style.css">
+<c:set var="context" value="${pageContext.request.contextPath}" />
+<link type="text/css" rel="stylesheet" href="${context}/css/stats.css">
+<link type="text/css" rel="stylesheet" href="${context}/css/style.css">
 </head>
 <body>
 
@@ -31,7 +32,7 @@
 </c:choose>
 
 <br />
-<a href="./home.jsp">Return Home</a>
+<a href="${context}/jsp/home.jsp">Return Home</a>
 </div>
 
 </body>

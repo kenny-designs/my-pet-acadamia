@@ -7,13 +7,14 @@
 <head>
 <meta charset="UTF-8">
 <title>My Pet Acadamia: Team</title>
-<link type="text/css" rel="stylesheet" href="css/style.css">
-<link type="text/css" rel="stylesheet" href="css/manage-team.css">
+<c:set var="context" value="${pageContext.request.contextPath}" />
+<link type="text/css" rel="stylesheet" href="${context}/css/manage-team.css">
+<link type="text/css" rel="stylesheet" href="${context}/css/style.css">
 </head>
 <body class="manage-team-bg">
 
 <div id="team-container">
-<a href="./home.jsp">Return Home</a>
+<a href="${context}/jsp/home.jsp">Return Home</a>
 
 <h1 class="header">Your Current Team</h1>
 <hr />
@@ -21,7 +22,7 @@
 <div class="pet-flex-container">
 <c:forEach var="tempPet" items="${PLAYER_PETS_TEAM}">
 	<div class="card">
-	  <img src="./images/${tempPet.pet.imageURL}" alt="PetImage" style="width:100%">
+	  <img src="${context}/images/${tempPet.pet.imageURL}" alt="PetImage" style="width:100%">
 	  <div class="container">
 		<h1><b>${tempPet.pet.name}</b></h1> 		
 		<h2><em>lvl. ${tempPet.level}</em></h2>
@@ -58,7 +59,7 @@
 <div class="pet-flex-container">
 <c:forEach var="tempPet" items="${PLAYER_PETS_COLLECTION}">
 	<div class="card">
-	  <img src="./images/${tempPet.pet.imageURL}" alt="PetImage" style="width:100%">
+	  <img src="${context}/images/${tempPet.pet.imageURL}" alt="PetImage" style="width:100%">
 	  <div class="container">
 		<h1><b>${tempPet.pet.name}</b></h1> 		
 		<h2><em>lvl. ${tempPet.level}</em></h2>

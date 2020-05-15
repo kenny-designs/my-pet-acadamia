@@ -7,8 +7,9 @@
 <head>
 <meta charset="UTF-8">
 <title>My Pet Acadamia: Safari Results</title>
-<link type="text/css" rel="stylesheet" href="css/safari.css">
-<link type="text/css" rel="stylesheet" href="css/style.css">
+<c:set var="context" value="${pageContext.request.contextPath}" />
+<link type="text/css" rel="stylesheet" href="${context}/css/safari.css">
+<link type="text/css" rel="stylesheet" href="${context}/css/style.css">
 </head>
 <body>
 
@@ -26,9 +27,9 @@
 	</c:otherwise>
 </c:choose>
 
-<a href="./safari.jsp">Go to Safari</a>
+<a href="${context}/jsp/safari.jsp">Go to Safari</a>
 <br/><br/>
-<a href="./home.jsp">Return Home</a>
+<a href="${context}/jsp/home.jsp">Return Home</a>
 
 </div>
 </div>

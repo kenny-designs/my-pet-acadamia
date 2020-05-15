@@ -7,9 +7,10 @@
 <head>
 <meta charset="UTF-8">
 <title>My Pet Acadamia: Safari</title>
-<link type="text/css" rel="stylesheet" href="css/safari.css">
-<link type="text/css" rel="stylesheet" href="css/style.css">
-<script src="./js/util.js"></script>
+<c:set var="context" value="${pageContext.request.contextPath}" />
+<link type="text/css" rel="stylesheet" href="${context}/css/safari.css">
+<link type="text/css" rel="stylesheet" href="${context}/css/style.css">
+<script src="${context}/js/util.js"></script>
 </head>
 <body>
 
@@ -37,7 +38,7 @@
 	</c:otherwise>
 </c:choose>
 <br/>
-<a href="./home.jsp">Return Home</a>
+<a href="${context}/jsp/home.jsp">Return Home</a>
 </div>
 
 </body>
